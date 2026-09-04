@@ -1,4 +1,7 @@
 /* rostyslav-marketing.com v5 — lives in page 158 content */
+/* Silkscreen lacks Č Ť Ď Ľ Ň Ŕ Ĺ: same family name, so these code points come from our composed pixel glyphs instead of a system fallback */
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:400;font-display:swap;src:url(https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@769fea5/v5/fonts/silkscreen-sk.woff2) format('woff2');unicode-range:U+010C-010D,U+0164-0165,U+010E-010F,U+013D-013E,U+0147-0148,U+0154-0155,U+0139-013A}
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:700;font-display:swap;src:url(https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@769fea5/v5/fonts/silkscreen-sk-bold.woff2) format('woff2');unicode-range:U+010C-010D,U+0164-0165,U+010E-010F,U+013D-013E,U+0147-0148,U+0154-0155,U+0139-013A}
 .entry-content,.wp-block-post-content,#rosw-app{max-width:none!important;margin:0!important;padding:0!important}
 #rosw-app{position:relative}
 html:not([lang="en"]):not([lang="uk"]) #projekty,html:not([lang="en"]):not([lang="uk"]) [data-cases-only]{display:none}
