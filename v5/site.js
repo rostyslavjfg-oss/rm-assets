@@ -22,7 +22,8 @@
     link:['........','.##..##.','#..##..#','#......#','#......#','#..##..#','.##..##.','........'],
     x:['#......#','.#....#.','..#..#..','...##...','...##...','..#..#..','.#....#.','#......#'],
     down:['...##...','...##...','...##...','...##...','#..##..#','.#.##.#.','..####..','...##...'],
-    right:['....#...','....##..','....###.','########','########','....###.','....##..','....#...']
+    right:['....#...','....##..','....###.','########','########','....###.','....##..','....#...'],
+    left:['...#....','..##....','.###....','########','########','.###....','..##....','...#....']
   };
   function pxSvg(name){ var m=PX[name]; if(!m) return ''; var r=''; for(var y=0;y<8;y++){ for(var x=0;x<8;x++){ if(m[y][x]==='#') r+='<rect x="'+x+'" y="'+y+'" width="1" height="1"/>'; } } return '<svg viewBox="0 0 8 8" fill="currentColor" aria-hidden="true">'+r+'</svg>'; }
   $$('[data-px]').forEach(function(el){ el.innerHTML=pxSvg(el.getAttribute('data-px')); });
@@ -137,9 +138,10 @@
   function endDrag(){ if(!drag) return; drag=false; strip.classList.remove('is-drag'); var i=Math.round(strip.scrollLeft/slideW()); strip.scrollTo({left:i*slideW(),behavior:'smooth'}); }
   strip.addEventListener('pointerup',endDrag); strip.addEventListener('pointercancel',endDrag); strip.addEventListener('pointerleave',endDrag);
 
-  var quotes=$$('#voice blockquote'), whos=$$('#who button'), bar=$('#bar'), vi=0, vt=0;
-  function showV(i){ vi=i; quotes.forEach(function(q,k){ q.classList.toggle('is-on',k===i); }); whos.forEach(function(w,k){ w.classList.toggle('is-on',k===i); }); bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); clearTimeout(vt); if(!reduced) vt=setTimeout(function(){ showV((vi+1)%quotes.length); },9000); }
-  whos.forEach(function(w){ w.addEventListener('click',function(){ showV(+w.dataset.v); }); });
+  var quotes=$$('#voice blockquote'), auth=$('#auth'), vcnt=$('#vcnt'), vi=0, vt=0;
+  var AUTH=[['Lívia Jankajová','SMM · Content creator · Digital marketing'],['Samuel Urbanec','Performance marketing'],['Adam Kovaľ','Graphic Designer · Founder of yeba.sk'],['Kristián Mockovčiak','Digital Account Manager'],['Konstantin Demidov','Founder QuadRise · Growth Marketing']];
+  function showV(i){ vi=(i+quotes.length)%quotes.length; quotes.forEach(function(q,k){ q.classList.toggle('is-on',k===vi); }); if(auth) auth.innerHTML='<b>'+AUTH[vi][0]+'</b><span>'+AUTH[vi][1]+'</span>'; if(vcnt) vcnt.textContent='0'+(vi+1)+' / 0'+quotes.length; clearTimeout(vt); if(!reduced) vt=setTimeout(function(){ showV(vi+1); },9000); }
+  var vp=$('#vprev'), vn=$('#vnext'); if(vp) vp.addEventListener('click',function(){ showV(vi-1); }); if(vn) vn.addEventListener('click',function(){ showV(vi+1); });
   if(!reduced) vt=setTimeout(function(){ showV(1); },9000);
 
   $$('.scrollcue i').forEach(function(i){ i.outerHTML='<span class="pxi" data-px="down" style="width:14px;height:14px;color:var(--accent)">'+pxSvg('down')+'</span>'; });
