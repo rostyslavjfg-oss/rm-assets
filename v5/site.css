@@ -73,7 +73,7 @@ html.hide-top .top{transform:translateY(-140%)}
 /* hover: tilt + glare */
 .tilt{will-change:transform;transition:transform .5s var(--ease)}
 .glare{position:absolute;inset:0;pointer-events:none;z-index:2;border-radius:inherit;opacity:0;transition:opacity .45s;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.34) 0%,rgba(255,255,255,.08) 28%,transparent 52%);mix-blend-mode:soft-light}
-.tilt:hover .glare{opacity:1}
+@media (hover:hover) and (pointer:fine){.tilt:hover .glare{opacity:1}}
 
 /* 3D objects */
 .obj{position:absolute;pointer-events:none;z-index:0;will-change:transform;filter:drop-shadow(0 30px 50px rgba(15,15,18,.16))}
@@ -319,7 +319,7 @@ html.menu-open{overflow:hidden}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 @media (max-width:1100px){
-  .menu{grid-template-columns:1fr;padding:96px var(--pad) 40px}
+  .menu{grid-template-columns:1fr;padding:104px var(--pad) 40px;align-content:start}.menu ol{align-content:start}
   .menu__aside{display:none}
   .menu li a{font-size:clamp(40px,11vw,72px)}
   .state .panel{grid-template-columns:1fr}
@@ -420,3 +420,6 @@ html.menu-open{overflow:hidden}
 .form input.wpcf7-submit{width:auto}
 /* theme link colour must not leak into the app */
 .foot__cols nav a,.menu__aside .links a,.brand,.foot__cols nav a:visited,.menu__aside .links a:visited{color:inherit;text-decoration:none}
+/* touch devices: no sticky hover glare on the photos; header CTA never wraps */
+@media (hover:none){.glare{display:none}}
+.pill{white-space:nowrap}
