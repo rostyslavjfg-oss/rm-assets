@@ -46,14 +46,16 @@
   if (!HINT[lang]) lang = 'sk';
   if (hint) hint.textContent = HINT[lang];
 
-  /* ---- sound: ambient noise loop, glitch ticks, zoom whoosh (browsers need a gesture before audio) ---- */
+  /* ---- sound: ambient noise loop + zoom whoosh. On by default; browsers only let audio start
+     after the first gesture (or straight away where autoplay is allowed), so we try at load and
+     again on the first pointer/key/touch. The toggle mutes. ---- */
   var AUD = 'https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@c39cc8a/v5/audio/';
   var SND = { sk: ['zvuk', 'zap', 'vyp'], en: ['sound', 'on', 'off'], uk: ['звук', 'увімк', 'вимк'] };
   var sndBtn = root.querySelector('[data-rm-snd]');
   var sndMuted = false;
   var sndLive = false;
   var armed = false;
-  var noise = null, whoosh = null, ticks = [], tickI = 0, fadeT = 0;
+  var noise = null, whoosh = null, fadeT = 0;
   try { sndMuted = sessionStorage.getItem('rm_sound') === '0'; } catch (e) {}
   function mkAudio(name, vol, loop) {
     var a = new Audio(AUD + name);
@@ -66,7 +68,6 @@
     if (noise) return;
     noise = mkAudio('noise-loop.mp3', 0, true);
     whoosh = mkAudio('zoom.mp3', 1, false);
-    for (var i = 0; i < 3; i += 1) ticks.push(mkAudio('glitch.mp3', 0.6, false));
   }
   function quiet(p) { if (p) { if (p.then) p.then(null, function () {}); } }
   function fadeNoise(to, ms, then) {
@@ -83,13 +84,13 @@
     if (!sndBtn) return;
     var L = SND[lang] || SND.sk;
     var t = sndBtn.querySelector('span');
-    if (t) t.textContent = L[0] + ' · ' + (sndLive ? L[1] : L[2]);
-    sndBtn.setAttribute('aria-pressed', sndLive ? 'true' : 'false');
+    if (t) t.textContent = L[0] + ' · ' + (sndMuted ? L[2] : L[1]);
+    sndBtn.setAttribute('aria-pressed', sndMuted ? 'false' : 'true');
     root.classList.toggle('is-sound', sndLive);
   }
   function sndStart() {
     if (sndMuted) return;
-    if (mode !== 'idle') return;
+    if (mode === 'done') return;
     sndInit();
     if (sndLive) return;
     var p = null;
@@ -97,9 +98,15 @@
     if (!p) return;
     if (!p.then) return;
     p.then(function () {
-      if (mode !== 'idle') { try { noise.pause(); } catch (e) {} return; }
-      sndLive = true;
       armed = true;
+      if (sndMuted) { try { noise.pause(); } catch (e) {} return; }
+      if (mode !== 'idle') {
+        /* the gesture that unlocked audio was the click itself: swell under the whoosh, then out */
+        try { noise.volume = 0.7; } catch (e) {}
+        fadeNoise(0, 1600, function () { try { noise.pause(); } catch (e) {} });
+        return;
+      }
+      sndLive = true;
       fadeNoise(1, 1800);
       sndLabel();
     }, function () {});
@@ -110,46 +117,35 @@
     if (!noise) return;
     fadeNoise(0, ms, function () { try { noise.pause(); } catch (e) {} });
   }
-  function sfxGlitch(hard) {
-    if (sndMuted) return;
-    if (!armed) return;
-    var a = ticks[tickI];
-    tickI = (tickI + 1) % ticks.length;
-    if (!a) return;
-    try {
-      a.pause();
-      a.currentTime = 0;
-      a.volume = hard ? 0.9 : 0.55;
-      a.playbackRate = hard ? 0.7 + Math.random() * 0.3 : 0.9 + Math.random() * 0.5;
-      quiet(a.play());
-    } catch (e) {}
-  }
   function sfxZoom() {
     if (sndMuted) return;
     sndInit();
     armed = true;
     try { whoosh.currentTime = 0; quiet(whoosh.play()); } catch (e) {}
-    if (sndLive) fadeNoise(0, 2000);
+    if (sndLive) { fadeNoise(0, 2000); return; }
+    sndStart();
   }
   function sndKill() {
     clearInterval(fadeT);
     try { if (noise) noise.pause(); } catch (e) {}
-    for (var i = 0; i < ticks.length; i += 1) { try { ticks[i].pause(); } catch (e) {} }
   }
+  function gesture() {
+    if (mode !== 'idle') return;
+    if (sndLive) return;
+    sndStart();
+  }
+  window.addEventListener('pointerdown', gesture, { passive: true, capture: true });
+  window.addEventListener('touchstart', gesture, { passive: true, capture: true });
+  window.addEventListener('keydown', gesture, { passive: true, capture: true });
   if (sndBtn) {
     sndBtn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
       armed = true;
-      if (sndLive) {
-        sndMuted = true;
-        try { sessionStorage.setItem('rm_sound', '0'); } catch (err) {}
-        sndStop(300);
-      } else {
-        sndMuted = false;
-        try { sessionStorage.setItem('rm_sound', '1'); } catch (err) {}
-        sndStart();
-      }
+      sndMuted = !sndMuted;
+      try { sessionStorage.setItem('rm_sound', sndMuted ? '0' : '1'); } catch (err) {}
+      if (sndMuted) sndStop(300); else sndStart();
+      sndLabel();
     });
   }
   sndLabel();
@@ -230,7 +226,6 @@
   }
   function burst(hard, dur) {
     if (!sctx) return;
-    sfxGlitch(hard);
     shardHard = !!hard;
     shardEnd = performance.now() + dur;
     shardNext = 0;
