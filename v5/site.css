@@ -437,3 +437,61 @@ html.menu-open{overflow:hidden}
 .top .menu-btn{padding:6px}
 .brand__mark{height:13px!important}
 }
+/* ---- sub-pages: blog index, single post, legal pages, 404 (header/footer come from theme template parts) ---- */
+.sub{position:relative;max-width:1400px;margin:0 auto;padding:clamp(150px,20vh,210px) var(--pad) clamp(60px,10vh,120px)}
+.sub .post,.sub .legal{max-width:76ch;margin:0 auto}
+.sub .post__head{margin-bottom:clamp(36px,5vh,64px)}
+.sub .post__head .kicker{display:flex;flex-wrap:wrap;gap:14px 22px;margin-bottom:22px}
+.sub .post__head h1,.sub .blog__head h1,.sub .nf h1{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:-.01em;line-height:.92;font-size:clamp(44px,7vw,104px);margin:0;text-wrap:balance}
+.sub .post__head .lead{font-size:clamp(18px,1.4vw,22px);line-height:1.5;color:var(--ink-2);margin:26px 0 0;max-width:60ch}
+.sub .post .wp-block-post-content,.sub .legal .wp-block-post-content{font-size:clamp(17px,1.2vw,19px);line-height:1.65;color:var(--ink)}
+.sub .wp-block-post-content>*{max-width:76ch;margin-left:0}
+.sub .wp-block-post-content p{margin:0 0 1.3em}
+.sub .wp-block-post-content h2{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:-.005em;line-height:.98;font-size:clamp(30px,3.6vw,48px);margin:2.4em 0 .7em;text-wrap:balance}
+.sub .wp-block-post-content h3{font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.01em;line-height:1.05;font-size:clamp(22px,2.2vw,30px);margin:2em 0 .6em}
+.sub .wp-block-post-content h2:first-child,.sub .wp-block-post-content h3:first-child{margin-top:0}
+.sub .wp-block-post-content ul,.sub .wp-block-post-content ol{padding-left:1.2em;margin:0 0 1.4em}
+.sub .wp-block-post-content li{margin:0 0 .5em}
+.sub .wp-block-post-content li::marker{color:var(--accent)}
+.sub .wp-block-post-content a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:2px;text-underline-offset:3px}
+.sub .wp-block-post-content a:hover{color:var(--accent)}
+.sub .wp-block-post-content strong{font-weight:600}
+.sub .wp-block-post-content blockquote{margin:2em 0;padding:26px 30px;border-radius:24px;background:#F4F4F6;font-size:1.05em}
+.sub .wp-block-post-content blockquote p:last-child{margin:0}
+.sub .wp-block-post-content table{width:100%;border-collapse:collapse;margin:0 0 1.6em;font-size:.92em}
+.sub .wp-block-post-content th,.sub .wp-block-post-content td{text-align:left;vertical-align:top;padding:12px 14px;background:#F6F6F8}
+.sub .wp-block-post-content th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);background:#EEEEF1}
+.sub .wp-block-post-content tr:nth-child(even) td{background:#FBFBFC}
+.sub .wp-block-post-content .box{padding:26px 30px;border-radius:24px;background:#F4F4F6;margin:0 0 1.6em}
+.sub .wp-block-post-content .box p:last-child{margin:0}
+.sub .faq h3{font-family:var(--body);font-weight:600;text-transform:none;letter-spacing:0;font-size:1.15em;line-height:1.35;margin:1.6em 0 .4em}
+.sub .faq h3::before{content:"?";display:inline-block;width:1.4em;height:1.4em;line-height:1.4em;text-align:center;border-radius:50%;background:var(--ink);color:#fff;font-size:.75em;margin-right:.6em;vertical-align:.12em}
+.sub .cta{margin:3em 0 0;padding:34px 36px;border-radius:28px;background:var(--ink);color:#fff}
+.sub .cta h2{color:#fff;margin:0 0 .5em}
+.sub .cta p{color:rgba(255,255,255,.72);margin:0 0 1.4em}
+.sub .cta .pill{background:var(--accent);color:#fff}
+.sub .cta .pill:hover{background:#fff;color:var(--ink)}
+.sub .legal__lang{display:flex;gap:10px;margin:0 0 40px}
+.sub .legal__lang a{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:10px 14px;border-radius:999px;background:#F1F1F3;color:var(--ink);text-decoration:none}
+.sub .legal__lang a:hover{background:var(--ink);color:#fff}
+.sub .legal h1{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:-.01em;line-height:.92;font-size:clamp(40px,6vw,88px);margin:0 0 .3em;text-wrap:balance}
+.sub .legal .updated{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin:0 0 40px}
+/* blog index */
+.sub .blog__head{margin-bottom:clamp(48px,8vh,96px)}
+.sub .blog__head p{font-size:clamp(18px,1.4vw,22px);line-height:1.5;color:var(--ink-2);margin:26px 0 0;max-width:56ch;font-style:italic}
+.sub .bloglist .wp-block-post-template{display:grid;gap:clamp(40px,6vh,72px);list-style:none;padding:0;margin:0}
+.sub .bloglist .wp-block-post{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;max-width:88ch}
+.sub .bloglist .wp-block-post-date{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.sub .bloglist .wp-block-post-title{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:-.01em;line-height:.95;font-size:clamp(30px,4vw,60px);margin:0;text-wrap:balance}
+.sub .bloglist .wp-block-post-title a{color:var(--ink);text-decoration:none;transition:color .3s}
+.sub .bloglist .wp-block-post-title a:hover{color:var(--accent)}
+.sub .bloglist .wp-block-post-excerpt{font-size:clamp(16px,1.15vw,18px);line-height:1.55;color:var(--ink-2);max-width:66ch}
+.sub .bloglist .wp-block-post-excerpt__more-text,.sub .bloglist .wp-block-post-excerpt__more-link{display:none}
+.sub .bloglist .wp-block-query-pagination{margin-top:64px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.sub .bloglist .wp-block-query-pagination a{color:var(--ink)}
+/* 404 */
+.sub .nf{min-height:40vh;display:grid;align-content:center;gap:22px;max-width:70ch}
+.sub .nf .big{font-family:var(--display);font-weight:900;font-size:clamp(120px,24vw,320px);line-height:.85;letter-spacing:-.03em;color:#EDEDF0;margin:0 0 -.1em}
+.sub .nf p{font-size:clamp(18px,1.4vw,22px);color:var(--ink-2);margin:0}
+.sub .nf .pill{justify-self:start}
+@media (max-width:749px){.sub{padding-top:120px}.sub .cta{padding:26px 24px;border-radius:22px}.sub .wp-block-post-content th,.sub .wp-block-post-content td{padding:10px;font-size:.9em}}
