@@ -423,3 +423,14 @@ html.menu-open{overflow:hidden}
 /* touch devices: no sticky hover glare on the photos; header CTA never wraps */
 @media (hover:none){.glare{display:none}}
 .pill{white-space:nowrap}
+/* narrow phones: header must hold logo, menu, 3 languages and the CTA on one line in every language */
+@media (max-width:480px){
+.top .bar{gap:8px;padding:8px 8px 8px 12px}
+.top .right{gap:8px}
+.top .right .lang{gap:2px}
+.top .lang span{display:none}
+.top .lang button{padding:4px 3px;font-size:10px}
+.top .pill{padding:8px 11px;font-size:11px;gap:6px;flex:0 0 auto}
+.top .menu-btn{padding:6px}
+.brand__mark{height:13px!important}
+}
