@@ -150,6 +150,50 @@
   var fm=$('.foot__mask'), foot=$('.foot');
   if(fm){ if(!reduced){ var fmTick=function(){ var r=foot.getBoundingClientRect(); var vh=innerHeight; var p=Math.max(0,Math.min(1,(vh-r.top)/(r.height*0.9))); var ty=40-40*p; var sc=.92+.08*p; var rot=(1-p)*-4; fm.style.transform='translate(-50%,'+ty.toFixed(2)+'%) scale('+sc.toFixed(3)+') rotate('+rot.toFixed(2)+'deg)'; };
     window.addEventListener('scroll',fmTick,{passive:true}); window.addEventListener('resize',fmTick); fmTick(); } else fm.style.transform='translate(-50%,0)'; }
+
+  /* ---- lead source: remember where the visitor came from (first touch of the visit + first ever visit)
+     and append it to the contact form message right before Contact Form 7 sends it (the visitor's textarea stays clean) ---- */
+  (function(){
+    var loc=window.location, own=loc.hostname.replace(/^www\./,''), AMP='\u0026';
+    function parseQuery(){ var out={}; var s=loc.search.replace(/^\?/,''); if(!s) return out; s.split(AMP).forEach(function(kv){ var p=kv.split('='); if(!p[0]) return; try{ out[decodeURIComponent(p[0])]=decodeURIComponent((p[1]||'').replace(/\+/g,' ')); }catch(e){} }); return out; }
+    function hostOf(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return ''; } }
+    var KNOWN=[[/chatgpt\.com|chat\.openai\.com|openai\.com/,'ChatGPT'],[/perplexity\.ai/,'Perplexity'],[/gemini\.google\.com|bard\.google\.com/,'Google Gemini'],[/claude\.ai/,'Claude'],[/copilot\.microsoft\.com/,'Microsoft Copilot'],[/^google\./,'Google – organické vyhľadávanie'],[/^bing\.com/,'Bing'],[/duckduckgo\.com/,'DuckDuckGo'],[/^search\.seznam\.cz|^seznam\.cz/,'Seznam'],[/yahoo\./,'Yahoo'],[/^ecosia\.org/,'Ecosia'],[/instagram\.com/,'Instagram'],[/facebook\.com|^fb\.com|^fb\.me|^m\.facebook\.com|messenger\.com/,'Facebook'],[/linkedin\.com|^lnkd\.in/,'LinkedIn'],[/^t\.co$|twitter\.com|^x\.com/,'X / Twitter'],[/youtube\.com|^youtu\.be/,'YouTube'],[/tiktok\.com/,'TikTok'],[/threads\.(net|com)/,'Threads'],[/reddit\.com/,'Reddit'],[/pinterest\./,'Pinterest'],[/mail\.google\.com|outlook\.(live|office)\.com|email\.seznam\.cz/,'E-mail']];
+    function label(h,q){
+      if(q.utm_source) return 'UTM: '+q.utm_source+(q.utm_medium?' / '+q.utm_medium:'')+(q.utm_campaign?' / '+q.utm_campaign:'');
+      if(q.gclid) return 'Google Ads (gclid)'; if(q.fbclid) return 'Meta Ads / Facebook (fbclid)'; if(q.msclkid) return 'Microsoft Ads (msclkid)'; if(q.ttclid) return 'TikTok Ads (ttclid)'; if(q.li_fat_id) return 'LinkedIn Ads';
+      if(!h) return 'Priamy vstup (zadaná adresa alebo záložka)';
+      for(var i=0;i<KNOWN.length;i+=1){ if(KNOWN[i][0].test(h)) return KNOWN[i][1]+' ('+h+')'; }
+      return 'Odkaz z webu: '+h;
+    }
+    var store=null; try{ store=window.sessionStorage; }catch(e){}
+    var rec=null; try{ rec=JSON.parse(store.getItem('rm_src')||'null'); }catch(e){}
+    if(!rec){
+      var q=parseQuery(); var ref=document.referrer||''; var rh=hostOf(ref); if(rh===own) rh='';
+      var tags=[]; Object.keys(q).forEach(function(k){ if(/^utm_|^gclid$|^fbclid$|^msclkid$|^ttclid$|^li_fat_id$/.test(k)) tags.push(k+'='+q[k]); });
+      rec={src:label(rh,q),ref:rh?ref.slice(0,180):'',land:(loc.pathname+loc.search).slice(0,120),t:new Date().toISOString(),utm:tags.join(' ')};
+      try{ store.setItem('rm_src',JSON.stringify(rec)); }catch(e){}
+    }
+    var first=null; try{ first=JSON.parse(localStorage.getItem('rm_first_src')||'null'); if(!first){ first=rec; localStorage.setItem('rm_first_src',JSON.stringify(rec)); } }catch(e){}
+    function summary(){
+      var L=['Zdroj návštevy: '+rec.src];
+      if(rec.ref) L.push('Odkazujúca URL: '+rec.ref);
+      if(rec.utm) L.push('Parametre: '+rec.utm);
+      L.push('Vstupná stránka: '+rec.land);
+      L.push('Odoslané zo stránky: '+loc.pathname+(loc.hash||''));
+      if(first){ if(first.t!==rec.t) L.push('Prvá návšteva webu: '+first.src+' ('+first.t.slice(0,10)+')'); }
+      var mob=false; try{ mob=matchMedia('(max-width:820px)').matches; }catch(e){}
+      L.push('Jazyk webu: '+String(lang||'sk').toUpperCase()+' · Zariadenie: '+(mob?'mobil':'desktop'));
+      return L.join('\n');
+    }
+    document.addEventListener('wpcf7beforesubmit',function(e){
+      var d=e.detail; if(!d) return; var fd=d.formData; if(!fd) return; if(typeof fd.get!=='function') return;
+      var msg=fd.get('your-message'); if(msg===null) return;
+      if(String(msg).indexOf('Zdroj návštevy:')!==-1) return;
+      fd.set('your-message',String(msg)+'\n\n--\n'+summary());
+      if(fd.has('lead-source')) fd.set('lead-source',rec.src);
+    });
+  })();
+
   var clock=$('#clock');
   function tick2(){ try{ clock.textContent=new Intl.DateTimeFormat('sk-SK',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Bratislava'}).format(new Date()); }catch(e){} }
   tick2(); setInterval(tick2,20000);
