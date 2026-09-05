@@ -518,3 +518,8 @@ main.sub{position:relative;max-width:1400px;margin:0 auto;padding:clamp(150px,20
 .foot__cols{order:3;margin-top:0}
 .foot__bg{height:62%}
 }
+
+/* legal tables: scroll inside their own box on narrow screens instead of widening the page */
+.sub .legal table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sub .legal table thead,.sub .legal table tbody{display:table;width:100%;min-width:560px}
+@media (max-width:820px){.sub .legal table td,.sub .legal table th{font-size:13px;padding:10px 12px}}
