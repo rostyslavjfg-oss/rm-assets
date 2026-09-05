@@ -68,7 +68,8 @@
     $('#ckOk').addEventListener('click',function(){ consentSave('granted'); if(window.rmLoadTags) window.rmLoadTags(); close(); });
     $('#ckNo').addEventListener('click',function(){ consentSave('denied'); close(); });
   }
-  if(!consentStored()){ var consentLater=function(){ setTimeout(consentShow,2200); }; if(document.readyState==='complete') consentLater(); else window.addEventListener('load',consentLater); }
+  /* consent: under the intro it waits for the visitor to enter; elsewhere it comes a moment after load */
+  if(!consentStored()){ if(document.getElementById('rm-intro')){ document.addEventListener('rm-intro-enter',function(){ setTimeout(consentShow,1400); }); } else { var consentLater=function(){ setTimeout(consentShow,2200); }; if(document.readyState==='complete') consentLater(); else window.addEventListener('load',consentLater); } }
   document.addEventListener('click',function(e){ var r=e.target.closest?e.target.closest('[data-consent-reset]'):null; if(!r) return; e.preventDefault(); try{ localStorage.removeItem('rm_consent'); }catch(x){} window.rmConsent=null; consentShow(); });
 
   /* ---- language routing. Translated pages live on their own URLs (Polylang: / = sk, /en/, /uk/) and announce the alternates
