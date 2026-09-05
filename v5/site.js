@@ -73,16 +73,16 @@
   document.addEventListener('click',function(e){ var r=e.target.closest?e.target.closest('[data-consent-reset]'):null; if(!r) return; e.preventDefault(); try{ localStorage.removeItem('rm_consent'); }catch(x){} window.rmConsent=null; consentShow(); });
 
   /* ---- GA4 engagement events (gtag comes from the inline consent loader; without consent the calls only queue in dataLayer) ---- */
-  function track(name,params){ if(typeof window.gtag!=='function') return; var p=params||{}; p.language=LANG; p.page_path=location.pathname; try{ window.gtag('event',name,p); }catch(e){} }
+  function rmTrack(name,params){ if(typeof window.gtag!=='function') return; var p=params||{}; p.language=LANG; p.page_path=location.pathname; try{ window.gtag('event',name,p); }catch(e){} }
   document.addEventListener('click',function(e){ var a=e.target.closest?e.target.closest('a,button'):null; if(!a) return;
-    if(a.matches('.top .pill, .foot__top .big a, .sub .cta .pill, .nf .pill')){ track('cta_click',{cta_text:(a.textContent||'').trim().slice(0,40),cta_location:a.closest('.top')?'header':(a.closest('.foot')?'footer':'page')}); return; }
-    if(a.closest('#lang')){ track('lang_switch',{to_lang:a.getAttribute('data-lang')||''}); return; }
-    if(a.id==='menuBtn'){ track('menu_open',{}); return; }
-    if(a.id==='ckOk'){ track('consent_granted',{}); return; }
-    var host=a.hostname||''; if(host){ if(host!==location.hostname){ track('outbound_click',{link_domain:host,link_url:a.href}); } } });
-  var formStarted=false; document.addEventListener('focusin',function(e){ if(formStarted) return; if(!e.target.closest) return; if(!e.target.closest('#cf7wrap')) return; formStarted=true; track('form_start',{form:'contact'}); });
-  document.addEventListener('rm-intro-enter',function(){ track('intro_enter',{}); });
-  if('IntersectionObserver' in window){ var seen={}; var vio=new IntersectionObserver(function(es){ es.forEach(function(en){ if(!en.isIntersecting) return; var id=en.target.id; if(seen[id]) return; seen[id]=true; track('view_section',{section:id}); vio.unobserve(en.target); }); },{threshold:.3}); ['projekty','vysledky','kontakt','sluzby'].forEach(function(id){ var el=document.getElementById(id); if(el) vio.observe(el); }); }
+    if(a.matches('.top .pill, .foot__top .big a, .sub .cta .pill, .nf .pill')){ rmTrack('cta_click',{cta_text:(a.textContent||'').trim().slice(0,40),cta_location:a.closest('.top')?'header':(a.closest('.foot')?'footer':'page')}); return; }
+    if(a.closest('#lang')){ rmTrack('lang_switch',{to_lang:a.getAttribute('data-lang')||''}); return; }
+    if(a.id==='menuBtn'){ rmTrack('menu_open',{}); return; }
+    if(a.id==='ckOk'){ rmTrack('consent_granted',{}); return; }
+    var host=a.hostname||''; if(host){ if(host!==location.hostname){ rmTrack('outbound_click',{link_domain:host,link_url:a.href}); } } });
+  var formStarted=false; document.addEventListener('focusin',function(e){ if(formStarted) return; if(!e.target.closest) return; if(!e.target.closest('#cf7wrap')) return; formStarted=true; rmTrack('form_start',{form:'contact'}); });
+  document.addEventListener('rm-intro-enter',function(){ rmTrack('intro_enter',{}); });
+  if('IntersectionObserver' in window){ var seen={}; var vio=new IntersectionObserver(function(es){ es.forEach(function(en){ if(!en.isIntersecting) return; var id=en.target.id; if(seen[id]) return; seen[id]=true; rmTrack('view_section',{section:id}); vio.unobserve(en.target); }); },{threshold:.3}); ['projekty','vysledky','kontakt','sluzby'].forEach(function(id){ var el=document.getElementById(id); if(el) vio.observe(el); }); }
   /* ---- language routing. Translated pages live on their own URLs (Polylang: / = sk, /en/, /uk/) and announce the alternates
      with link[hreflang] in the head. On those pages the page language wins and the switch navigates; pages that exist only in
      Slovak (blog, legal) keep the in-page JS translation of the interface. A stored preference redirects the Slovak home once. ---- */
