@@ -361,7 +361,7 @@ html.menu-open{overflow:hidden}
   .brand__mark{height:15px!important}
   .foot__mark{height:14px!important}
   .top .right .lang{display:flex;gap:6px}
-  .lang button,.lang a{padding:4px 1px;font-size:11px}
+  .lang button,.lang a{padding:6px 4px;font-size:11px;min-width:24px;min-height:24px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}
   .menu-btn span{display:none}
   .menu-btn{padding:8px}
   .pill{padding:9px 13px;font-size:12px}
@@ -452,7 +452,7 @@ html.menu-open{overflow:hidden}
 .top .right{gap:8px}
 .top .right .lang{gap:2px}
 .top .lang span{display:none}
-.top .lang button,.top .lang a{padding:4px 3px;font-size:10px}
+.top .lang button,.top .lang a{padding:6px 5px;font-size:10px;min-width:26px;min-height:26px}
 .top .pill{padding:8px 11px;font-size:11px;gap:6px;flex:0 0 auto}
 .top .menu-btn{padding:6px}
 .brand__mark{height:13px!important}
