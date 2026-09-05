@@ -645,3 +645,10 @@ html.js .strip.is-pinned{scroll-snap-type:none;scroll-behavior:auto;cursor:defau
 .sub .bloglist .category-novinky .wp-block-post-terms::before{background:#25C21A}
 .sub .bloglist .wp-block-post-excerpt{font-size:clamp(17px,1.25vw,20px);max-width:56ch}
 @media (max-width:749px){.sub .bloglist .wp-block-post{grid-template-columns:1fr;gap:18px}.sub .bloglist .bcard{max-width:300px}}
+
+/* ---- wide monitors: the page keeps the 1440-class layout, centred, with the full-bleed backgrounds still spanning the viewport ---- */
+@media (min-width:1700px){
+  :root{--pad:72px}
+  #rosw-app{max-width:1544px;margin:0 auto}
+  .state__bg,.foot__bg{left:50%;right:auto;width:100vw;transform:translateX(-50%)}
+}
