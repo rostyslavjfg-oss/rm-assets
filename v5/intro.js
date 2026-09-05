@@ -228,49 +228,8 @@
   }
 
 
-  /* ---- light: the jaw gap of the open frame, traced from the image itself (flood fill from the zoom origin
-     inside the mouth box), drawn white with a soft spill so the lips catch it. ---- */
-  var lightReady = false;
-  function buildLight() {
-    if (!light) return;
-    if (lightReady) return;
-    if (!open.naturalWidth) return;
-    var w = 360, h = Math.round(w * open.naturalHeight / open.naturalWidth) || 498;
-    var src = document.createElement('canvas'); src.width = w; src.height = h;
-    var sx = src.getContext('2d'); sx.drawImage(open, 0, 0, w, h);
-    var d;
-    try { d = sx.getImageData(0, 0, w, h).data; } catch (e) { return; }
-    var dark = new Uint8Array(w * h), i, x, y;
-    for (i = 0; i < w * h; i += 1) dark[i] = (d[i * 4] * 0.299 + d[i * 4 + 1] * 0.587 + d[i * 4 + 2] * 0.114) < 40 ? 1 : 0;
-    var x0 = Math.round(w * 0.27), x1 = Math.round(w * 0.73), y0 = Math.round(h * 0.752), y1 = Math.round(h * 0.815);
-    var seen = new Uint8Array(w * h), stack = [], ox = Math.round(w * 0.5), oy = Math.round(h * 0.785), n = 0;
-    if (!dark[oy * w + ox]) { for (y = oy - 6; y <= oy + 6; y += 1) { if (dark[y * w + ox]) { oy = y; break; } } }
-    stack.push(oy * w + ox); seen[oy * w + ox] = 1;
-    var shape = document.createElement('canvas'); shape.width = w; shape.height = h;
-    var cx = shape.getContext('2d'); var out = cx.createImageData(w, h), q = out.data;
-    while (stack.length) {
-      i = stack.pop(); n += 1;
-      x = i % w; y = (i - x) / w;
-      q[i * 4] = 255; q[i * 4 + 1] = 250; q[i * 4 + 2] = 244; q[i * 4 + 3] = 255;
-      if (x > x0) { if (dark[i - 1]) { if (!seen[i - 1]) { seen[i - 1] = 1; stack.push(i - 1); } } }
-      if (x < x1) { if (dark[i + 1]) { if (!seen[i + 1]) { seen[i + 1] = 1; stack.push(i + 1); } } }
-      if (y > y0) { if (dark[i - w]) { if (!seen[i - w]) { seen[i - w] = 1; stack.push(i - w); } } }
-      if (y < y1) { if (dark[i + w]) { if (!seen[i + w]) { seen[i + w] = 1; stack.push(i + w); } } }
-    }
-    if (n < 40) return;
-    cx.putImageData(out, 0, 0);
-    light.width = w; light.height = h;
-    var lx = light.getContext('2d');
-    lx.clearRect(0, 0, w, h);
-    try { lx.filter = 'blur(9px)'; lx.globalAlpha = 0.6; lx.drawImage(shape, 0, 0); } catch (e) {}
-    try { lx.filter = 'blur(0.8px)'; } catch (e) {}
-    lx.globalAlpha = 1; lx.drawImage(shape, 0, 0);
-    try { lx.filter = 'none'; } catch (e) {}
-    lightReady = true;
-    root.classList.add('has-light');
-  }
-  if (open.complete) { if (open.naturalWidth > 0) buildLight(); }
-  open.addEventListener('load', buildLight);
+  /* ---- light: a soft white ellipse over the jaw gap (CSS gradient, so it stays smooth at any zoom) ---- */
+  if (light) root.classList.add('has-light');
 
   /* mask fades in from the dark once the first frame is decoded */
   var readyDone = false;

@@ -17,7 +17,7 @@ html.rm-intro-skip #rm-intro{display:none !important}
 #rm-intro.is-open .rm-intro__pic--closed{opacity:0}
 #rm-intro .rm-intro__speck{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:overlay;opacity:.24;image-rendering:pixelated;image-rendering:crisp-edges}
 #rm-intro .rm-intro__shards{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-#rm-intro .rm-intro__light{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:0;transition:opacity .09s linear}
+#rm-intro .rm-intro__light{position:absolute;left:50%;top:78.5%;width:39%;height:5.2%;transform:translate(-50%,-50%);pointer-events:none;mix-blend-mode:screen;opacity:0;transition:opacity .09s linear;background:radial-gradient(closest-side,#fff 0 54%,rgba(255,250,242,.8) 70%,rgba(255,255,255,0) 100%)}
 #rm-intro.has-light.is-open .rm-intro__light{opacity:.9}
 #rm-intro.is-flying .rm-intro__body{animation:none}
 #rm-intro .rm-intro__white{position:absolute;inset:0;z-index:9;background:#fff;opacity:0;pointer-events:none}
