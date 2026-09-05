@@ -182,7 +182,7 @@
       L.push('Odoslané zo stránky: '+loc.pathname+(loc.hash||''));
       if(first){ if(first.t!==rec.t) L.push('Prvá návšteva webu: '+first.src+' ('+first.t.slice(0,10)+')'); }
       var mob=false; try{ mob=matchMedia('(max-width:820px)').matches; }catch(e){}
-      L.push('Jazyk webu: '+String(lang||'sk').toUpperCase()+' · Zariadenie: '+(mob?'mobil':'desktop'));
+      L.push('Jazyk webu: '+String(LANG||'sk').toUpperCase()+' · Zariadenie: '+(mob?'mobil':'desktop'));
       return L.join('\n');
     }
     document.addEventListener('wpcf7beforesubmit',function(e){
