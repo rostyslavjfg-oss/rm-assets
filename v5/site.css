@@ -312,6 +312,8 @@ html.menu-open{overflow:hidden}
 .foot__cols nav .pxi{width:14px;height:14px;color:var(--accent)}
 .foot__cols nav a:hover{color:var(--ink)}
 .foot__cols .clock b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.foot__cols [data-i18n="rights_home"] a{color:inherit;text-decoration:none}
+.foot__cols [data-i18n="rights_home"] a:hover{color:var(--ink)}
 .totop{width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;transition:background .3s,transform .4s var(--ease)}
 .totop:hover{background:var(--accent-grad);transform:translateY(-2px)}
 
@@ -653,3 +655,5 @@ html.js .strip.is-pinned{scroll-snap-type:none;scroll-behavior:auto;cursor:defau
   #rosw-app{max-width:1544px!important;margin:0 auto!important}
   .state__bg,.foot__bg{left:50%;right:auto;width:100vw;transform:translateX(-50%)}
 }
+/* blog card artwork: soft edges (the source art runs to the canvas edge) */
+.sub .bloglist .bcard,.sub .post .post__card{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%),linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%),linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%);mask-composite:intersect}
