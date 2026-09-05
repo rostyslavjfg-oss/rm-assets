@@ -151,6 +151,11 @@
   if(fm){ if(!reduced){ var fmTick=function(){ var r=foot.getBoundingClientRect(); var vh=innerHeight; var p=Math.max(0,Math.min(1,(vh-r.top)/(r.height*0.9))); var ty=40-40*p; var sc=.92+.08*p; var rot=(1-p)*-4; fm.style.transform='translate(-50%,'+ty.toFixed(2)+'%) scale('+sc.toFixed(3)+') rotate('+rot.toFixed(2)+'deg)'; };
     window.addEventListener('scroll',fmTick,{passive:true}); window.addEventListener('resize',fmTick); fmTick(); } else fm.style.transform='translate(-50%,0)'; }
 
+  /* ---- CF7 messages: the server sends the Slovak texts set in the CF7 admin; swap them for EN/UK visitors ---- */
+  var CF7MSG={"Ďakujem, správa bola odoslaná. Ozvem sa do 24 hodín.": {"en": "Thank you, your message has been sent. I will get back to you within 24 hours.", "uk": "Дякую, повідомлення надіслано. Відповім протягом 24 годин."}, "Správu sa nepodarilo odoslať. Skúste to prosím neskôr alebo mi napíšte na LinkedIn.": {"en": "The message could not be sent. Please try again later or write to me on LinkedIn.", "uk": "Не вдалося надіслати повідомлення. Спробуйте пізніше або напишіть мені в LinkedIn."}, "Skontrolujte prosím označené polia a skúste to znova.": {"en": "Please check the highlighted fields and try again.", "uk": "Перевірте позначені поля та спробуйте ще раз."}, "Toto pole je povinné.": {"en": "This field is required.", "uk": "Це поле обовʼязкове."}, "Zadajte platnú e-mailovú adresu.": {"en": "Please enter a valid e-mail address.", "uk": "Введіть коректну e-mail адресу."}};
+  function trCF7(){ if(LANG==='sk') return; $$('.wpcf7-response-output, .wpcf7-not-valid-tip').forEach(function(el){ var k=(el.textContent||'').trim(); var m=CF7MSG[k]; if(m!==undefined) el.textContent=(m[LANG]||k); }); }
+  ['wpcf7invalid','wpcf7spam','wpcf7mailsent','wpcf7mailfailed','wpcf7submit'].forEach(function(ev){ document.addEventListener(ev,function(){ setTimeout(trCF7,0); setTimeout(trCF7,400); }); });
+
   /* ---- lead source: remember where the visitor came from (first touch of the visit + first ever visit)
      and append it to the contact form message right before Contact Form 7 sends it (the visitor's textarea stays clean) ---- */
   (function(){
