@@ -17,6 +17,10 @@ html.rm-intro-skip #rm-intro{display:none !important}
 #rm-intro.is-open .rm-intro__pic--closed{opacity:0}
 #rm-intro .rm-intro__speck{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:overlay;opacity:.24;image-rendering:pixelated;image-rendering:crisp-edges}
 #rm-intro .rm-intro__shards{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#rm-intro .rm-intro__light{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:0;transition:opacity .09s linear}
+#rm-intro.has-light.is-open .rm-intro__light{opacity:.9}
+#rm-intro.is-flying .rm-intro__body{animation:none}
+#rm-intro .rm-intro__white{position:absolute;inset:0;z-index:9;background:#fff;opacity:0;pointer-events:none}
 #rm-intro .rm-intro__fog{position:absolute;inset:-22%;z-index:2;pointer-events:none;mix-blend-mode:screen;will-change:transform}
 #rm-intro .rm-intro__fog--a{background:radial-gradient(ellipse 34% 28% at 28% 64%,rgba(150,158,172,.085),transparent 70%),radial-gradient(ellipse 28% 36% at 76% 28%,rgba(140,146,160,.07),transparent 70%);animation:rm-fog-a 38s ease-in-out infinite alternate}
 #rm-intro .rm-intro__fog--b{background:radial-gradient(ellipse 42% 26% at 60% 82%,rgba(120,126,140,.08),transparent 70%),radial-gradient(ellipse 24% 30% at 16% 20%,rgba(150,150,160,.06),transparent 70%);animation:rm-fog-b 47s ease-in-out infinite alternate}
@@ -51,4 +55,4 @@ html.rm-intro-enter #rosw-app{animation:rm-page-in 1.9s cubic-bezier(.22,1,.36,1
 @keyframes rm-shimmer{0%,100%{filter:brightness(1)}17%{filter:brightness(1.03)}31%{filter:brightness(.985)}52%{filter:brightness(1.015)}74%{filter:brightness(.99)}}
 @keyframes rm-eq{from{height:2px}to{height:10px}}
 @keyframes rm-gl-text{0%{transform:translate(-50%,0)}33%{transform:translate(calc(-50% - 2px),0)}66%{transform:translate(calc(-50% + 1px),1px)}100%{transform:translate(-50%,0)}}
-@media (prefers-reduced-motion:reduce){#rm-intro .rm-intro__body,#rm-intro .rm-intro__hint,#rm-intro .rm-intro__grain,#rm-intro .rm-intro__scan::after,#rm-intro .rm-intro__fog,#rm-intro .rm-intro__vignette,#rm-intro .rm-intro__snd b{animation:none}#rm-intro .rm-intro__grain,#rm-intro .rm-intro__dust,#rm-intro .rm-intro__shards,#rm-intro .rm-intro__speck,#rm-intro .rm-intro__scan{display:none}html.rm-intro-lock #rosw-app{transform:none}}
+@media (prefers-reduced-motion:reduce){#rm-intro .rm-intro__body,#rm-intro .rm-intro__hint,#rm-intro .rm-intro__grain,#rm-intro .rm-intro__scan::after,#rm-intro .rm-intro__fog,#rm-intro .rm-intro__vignette,#rm-intro .rm-intro__snd b{animation:none}#rm-intro .rm-intro__grain,#rm-intro .rm-intro__dust,#rm-intro .rm-intro__shards,#rm-intro .rm-intro__speck,#rm-intro .rm-intro__light,#rm-intro .rm-intro__scan{display:none}html.rm-intro-lock #rosw-app{transform:none}}
