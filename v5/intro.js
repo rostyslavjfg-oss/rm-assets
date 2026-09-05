@@ -55,7 +55,7 @@
   /* ---- sound: ambient noise loop + zoom whoosh. On by default; browsers only let audio start
      after the first gesture (or straight away where autoplay is allowed), so we try at load and
      again on the first pointer/key/touch. The toggle mutes. ---- */
-  var AUD = 'https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@c39cc8a/v5/audio/';
+  var AUD = 'https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@7324316/v5/audio/';
   var SND = { sk: ['zvuk', 'zap', 'vyp'], en: ['sound', 'on', 'off'], uk: ['звук', 'увімк', 'вимк'] };
   var sndBtn = root.querySelector('[data-rm-snd]');
   var sndMuted = false;
@@ -73,7 +73,7 @@
   function sndInit() {
     if (noise) return;
     noise = mkAudio('noise-loop.mp3', 0, true);
-    whoosh = mkAudio('zoom.mp3', 1, false);
+    whoosh = mkAudio('zoom.mp3', 0.7, false);
   }
   function quiet(p) { if (p) { if (p.then) p.then(null, function () {}); } }
   function fadeNoise(to, ms, then) {
