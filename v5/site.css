@@ -555,16 +555,17 @@ html.js .nums2>div:nth-child(even){translate:0 calc(var(--pv,0) * 18px)}
 html.js .voices{translate:0 calc(var(--pv,0) * -24px)}
 html.js .contact__grid{translate:0 calc(var(--pv,0) * -20px)}
 /* statement: pinned panel, the copy lights up word by word as you scroll through */
-html.js .state{padding-top:0;padding-bottom:0;min-height:170vh}
+html.js .state{padding-top:0;padding-bottom:0;min-height:190vh}
 html.js .state__pin{position:sticky;top:0;min-height:100vh;display:grid;align-items:center;padding:12vh 0;box-sizing:border-box}
 html.js .state .panel{scale:calc(.94 + .06 * min(1, calc(var(--p,0) * 2.2)))}
-html.js .state .w>span{opacity:clamp(.14, calc((var(--p,0) - .3) / .42 * (var(--n,10) + 1) - var(--i,0)), 1)}
+html.js .state .w>span{opacity:clamp(.14, calc((var(--p,0) - .35) / .29 * (var(--n,10) + 1) - var(--i,0)), 1)}
 /* cases: on wide screens the section pins and the vertical scroll drives the strip sideways */
 html.js .cases.is-pin{padding-top:0;padding-bottom:0}
 html.js .cases.is-pin .cases__pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center}
 html.js .strip.is-pinned{scroll-snap-type:none;scroll-behavior:auto;cursor:default}
 @media (max-width:820px){
-  html.js .state{min-height:150vh}
+  html.js .state{min-height:160vh}
+  html.js .state .w>span{opacity:clamp(.14, calc((var(--p,0) - .39) / .21 * (var(--n,10) + 1) - var(--i,0)), 1)}
   html.js .state__pin{padding:16vh 0 10vh}
   html.js .svc2>li:nth-child(odd){translate:calc(var(--pv,0) * -3vw) 0}
   html.js .svc2>li:nth-child(even){translate:calc(var(--pv,0) * 3vw) 0}

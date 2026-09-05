@@ -435,7 +435,7 @@
     var fr = figure.getBoundingClientRect(), rr = root.getBoundingClientRect();
     var ox = fr.left + fr.width * 0.5 - rr.left, oy = fr.top + fr.height * 0.785 - rr.top;
     var openK = clamp(t / 0.14);
-    var g = clamp((t - 0.5) / 0.38); g = g * g * (3 - 2 * g);
+    var g = clamp((t - 0.55) / 0.4); g = g * g * (3 - 2 * g);
     var rx = fr.width * 0.185 * s * openK + g * window.innerWidth * 1.4;
     var ry = fr.height * 0.021 * s * openK + g * window.innerHeight * 1.4;
     if (rx < 1) rx = 1;
