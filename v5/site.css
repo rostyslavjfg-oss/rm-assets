@@ -438,7 +438,7 @@ html.menu-open{overflow:hidden}
 .brand__mark{height:13px!important}
 }
 /* ---- sub-pages: blog index, single post, legal pages, 404 (header/footer come from theme template parts) ---- */
-.sub{position:relative;max-width:1400px;margin:0 auto;padding:clamp(150px,20vh,210px) var(--pad) clamp(60px,10vh,120px)}
+main.sub{position:relative;max-width:1400px;margin:0 auto;padding:clamp(150px,20vh,210px) var(--pad) clamp(60px,10vh,120px)}
 .sub .post,.sub .legal{max-width:76ch;margin:0 auto}
 .sub .post__head{margin-bottom:clamp(36px,5vh,64px)}
 .sub .post__head .kicker{display:flex;flex-wrap:wrap;gap:14px 22px;margin-bottom:22px}
@@ -494,7 +494,7 @@ html.menu-open{overflow:hidden}
 .sub .nf .big{font-family:var(--display);font-weight:900;font-size:clamp(120px,24vw,320px);line-height:.85;letter-spacing:-.03em;color:#EDEDF0;margin:0 0 -.1em}
 .sub .nf p{font-size:clamp(18px,1.4vw,22px);color:var(--ink-2);margin:0}
 .sub .nf .pill{justify-self:start}
-@media (max-width:749px){.sub{padding-top:120px}.sub .cta{padding:26px 24px;border-radius:22px}.sub .wp-block-post-content th,.sub .wp-block-post-content td{padding:10px;font-size:.9em}}
+@media (max-width:749px){main.sub{padding-top:120px}.sub .cta{padding:26px 24px;border-radius:22px}.sub .wp-block-post-content th,.sub .wp-block-post-content td{padding:10px;font-size:.9em}}
 .foot__cols .legal-links{display:flex;gap:18px;white-space:nowrap}
 .foot__cols .legal-links a{color:inherit;text-decoration:none}
 .foot__cols .legal-links a:hover{color:var(--ink)}
