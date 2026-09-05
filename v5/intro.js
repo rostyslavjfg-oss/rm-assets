@@ -65,7 +65,7 @@
   try { sndMuted = sessionStorage.getItem('rm_sound') === '0'; } catch (e) {}
   function mkAudio(name, vol, loop) {
     var a = new Audio(AUD + name);
-    a.preload = 'auto';
+    a.preload = 'none';
     a.loop = !!loop;
     try { a.volume = vol; } catch (e) {}
     return a;
@@ -104,7 +104,7 @@
     if (!p) return;
     if (!p.then) return;
     p.then(function () {
-      armed = true;
+      armed = true; sndInit(); try { noise.load(); whoosh.load(); } catch (e) {}
       if (sndMuted) { try { noise.pause(); } catch (e) {} return; }
       if (mode !== 'idle') {
         /* the gesture that unlocked audio was the click itself: swell under the whoosh, then out */
@@ -126,7 +126,7 @@
   function sfxZoom() {
     if (sndMuted) return;
     sndInit();
-    armed = true;
+    armed = true; sndInit(); try { noise.load(); whoosh.load(); } catch (e) {}
     try { whoosh.currentTime = 0; quiet(whoosh.play()); } catch (e) {}
     if (sndLive) { fadeNoise(0, 2000); return; }
     sndStart();
@@ -147,7 +147,7 @@
     sndBtn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
-      armed = true;
+      armed = true; sndInit(); try { noise.load(); whoosh.load(); } catch (e) {}
       sndMuted = !sndMuted;
       try { sessionStorage.setItem('rm_sound', sndMuted ? '0' : '1'); } catch (err) {}
       if (sndMuted) sndStop(300); else sndStart();
@@ -208,10 +208,13 @@
       spMaskC = lumMask(closed);
       spMaskO = open.naturalWidth ? lumMask(open) : spMaskC;
     } catch (e) { spctx = null; return; }
-    var w = spMaskC.width, h = spMaskC.height, k;
-    for (k = 0; k < 6; k += 1) spFrames.push(noiseFrame(w, h));
+    var w = spMaskC.width, h = spMaskC.height;
     spW = w; spH = h; speck.width = w; speck.height = h;
+    spFrames.push(noiseFrame(w, h));
     spReady = true;
+    /* the remaining frames arrive one by one so the first paint is not blocked */
+    var more = function () { if (spFrames.length >= 6) return; spFrames.push(noiseFrame(w, h)); setTimeout(more, 140); };
+    setTimeout(more, 140);
   }
   open.addEventListener('load', function () { if (spReady) { try { spMaskO = lumMask(open); } catch (e) {} } });
   function drawSpeck(now) {

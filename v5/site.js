@@ -2,7 +2,8 @@
   var html=document.documentElement; html.classList.add('js');
   var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
-  $$('img[data-src]').forEach(function(im){ im.setAttribute('src',im.getAttribute('data-src')); });
+  /* images: the hero photo and the header mark load first; everything below the fold is lazy */
+  $$('img[data-src]').forEach(function(im){ var early=im.closest('.hero')||im.closest('.top'); if(early){ im.setAttribute('fetchpriority','high'); } else { if(!im.hasAttribute('loading')) im.setAttribute('loading','lazy'); im.setAttribute('decoding','async'); } im.setAttribute('src',im.getAttribute('data-src')); });
 
 
   /* pixel icons: 8x8 maps, rendered as crisp SVG rects */
@@ -38,6 +39,7 @@
     if(['sk','en','uk'].indexOf(lang)===-1) lang='sk'; LANG=lang;
     try{ localStorage.setItem('rosw_lang',lang); }catch(e){}
     html.setAttribute('lang',lang);
+    if(lang==='uk'){ if(!document.getElementById('rm-uk-fonts')){ var fl=document.createElement('link'); fl.id='rm-uk-fonts'; fl.rel='stylesheet'; fl.href='https://fonts-api.wp.com/css2?family=Oswald:wght@600;700'+'\u0026family=Press+Start+2P'+'\u0026display=swap'; document.head.appendChild(fl); } }
     $$('[data-i18n]').forEach(function(el){ if(el.dataset.sk===undefined) el.dataset.sk=el.innerHTML; var tr=I18N[el.getAttribute('data-i18n')]; el.innerHTML=(lang==='sk'||!tr||!tr[lang])?el.dataset.sk:tr[lang]; });
     $$('[data-i18n-ph]').forEach(function(el){ if(el.dataset.skph===undefined) el.dataset.skph=el.getAttribute('placeholder')||''; var tr=I18N_PH[el.getAttribute('data-i18n-ph')]; el.setAttribute('placeholder',(lang==='sk'||!tr||!tr[lang])?el.dataset.skph:tr[lang]); });
     $$('#lang [data-lang]').forEach(function(bt){ bt.classList.toggle('is-on',bt.dataset.lang===lang); });
@@ -47,7 +49,7 @@
     var CF={sk:['Tvoje meno','E-mail','Na čom pracuješ?','Odoslať →'],en:['Your name','Email','What are you working on?','Send →'],uk:['Твоє імʼя','E-mail','Над чим працюєш?','Надіслати →']}[lang];
     var fn=$('#cf7wrap [name="your-name"]'), fe=$('#cf7wrap [name="your-email"]'), fm=$('#cf7wrap [name="your-message"]'), fs=$('#cf7wrap .wpcf7-submit');
     if(fn) fn.setAttribute('placeholder',CF[0]); if(fe) fe.setAttribute('placeholder',CF[1]); if(fm) fm.setAttribute('placeholder',CF[2]); if(fs) fs.value=CF[3];
-    var mb=$('[data-label]'); if(mb) mb.textContent=MENU_LABEL[lang][html.classList.contains('menu-open')?1:0];
+    var mb=$('[data-label]'); if(mb){ mb.textContent=MENU_LABEL[lang][html.classList.contains('menu-open')?1:0]; var mbtn=$('#menuBtn'); if(mbtn) mbtn.setAttribute('aria-label',mb.textContent); }
   }
   /* ---- cookie consent: GA4 + GTM load only after "Súhlasím" (loader lives inline in the page head block: window.rmLoadTags / window.rmConsent). Written without the AND operator: WP rewrites ampersands inside inline scripts, and this file keeps the same rule ---- */
   function consentStored(){ var c=window.rmConsent||null; if(!c) return null; if(c.status==='granted') return c; if(c.status==='denied'){ if(c.t){ if((Date.now()-c.t)<180*864e5) return c; } } return null; }
@@ -55,7 +57,7 @@
   function consentShow(){
     if($('#consent')) return;
     var d=document.createElement('div'); d.className='consent'; d.id='consent'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','Cookies');
-    d.innerHTML='<div class="consent__art" aria-hidden="true"><img class="consent__plate" src="https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@d37d774/v5/consent-plate.webp" alt="" decoding="async"><img class="consent__fig" src="https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@d37d774/v5/consent-figure.webp" alt="" decoding="async"></div>'+
+    d.innerHTML='<div class="consent__art" aria-hidden="true"><img class="consent__plate" src="https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@40b21f3/v5/consent-plate.webp" alt="" decoding="async"><img class="consent__fig" src="https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@40b21f3/v5/consent-figure.webp" alt="" decoding="async"></div>'+
       '<div class="consent__box"><div class="consent__copy"><span class="consent__kicker"><span data-i18n="ck_kicker">Cookies</span><i></i></span><h2 class="consent__title" data-i18n="ck_title">Používam cookies</h2>'+
       '<p class="consent__txt" data-i18n="ck_txt">Na meranie návštevnosti používam Google Analytics a Google Tag Manager. Zapnú sa až s tvojím súhlasom.</p>'+
       '<a class="consent__more" href="/ochrana-osobnych-udajov/#cookies" data-i18n="ck_more" data-hover>Viac o cookies</a></div>'+
@@ -66,7 +68,7 @@
     $('#ckOk').addEventListener('click',function(){ consentSave('granted'); if(window.rmLoadTags) window.rmLoadTags(); close(); });
     $('#ckNo').addEventListener('click',function(){ consentSave('denied'); close(); });
   }
-  if(!consentStored()) consentShow();
+  if(!consentStored()){ var consentLater=function(){ setTimeout(consentShow,2200); }; if(document.readyState==='complete') consentLater(); else window.addEventListener('load',consentLater); }
   document.addEventListener('click',function(e){ var r=e.target.closest?e.target.closest('[data-consent-reset]'):null; if(!r) return; e.preventDefault(); try{ localStorage.removeItem('rm_consent'); }catch(x){} window.rmConsent=null; consentShow(); });
 
   /* ---- language routing. Translated pages live on their own URLs (Polylang: / = sk, /en/, /uk/) and announce the alternates
