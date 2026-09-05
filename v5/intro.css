@@ -43,7 +43,7 @@ html.rm-intro-skip #rm-intro{display:none !important}
 #rm-intro.is-sound .rm-intro__snd b:nth-child(4){animation-delay:-.2s}
 #rm-intro.is-flying .rm-intro__snd{opacity:0;transition:opacity .25s ease;pointer-events:none}
 html.rm-intro-lock #rosw-app{transform:scale(1.06);transform-origin:50% 42%}
-html.rm-intro-enter #rosw-app{animation:rm-page-in 1.9s cubic-bezier(.22,1,.36,1) both}
+html.rm-intro-enter #rosw-app{animation:rm-page-in 1.9s cubic-bezier(.22,1,.36,1) backwards}
 @keyframes rm-breath{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(0,-5px,0) scale(1.012)}}
 @keyframes rm-hint{0%,100%{opacity:.5;letter-spacing:.14em}50%{opacity:.95;letter-spacing:.22em}}
 @keyframes rm-roll{0%{transform:translateY(0)}100%{transform:translateY(860%)}}

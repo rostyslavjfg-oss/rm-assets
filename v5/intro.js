@@ -439,6 +439,8 @@
     if (entered) return;
     entered = true;
     html.classList.add('rm-intro-enter');
+    /* drop the class once the landing animation is over: a lingering animated transform on #rosw-app would turn it into the containing block for the fixed header, menu and consent bar */
+    setTimeout(function () { html.classList.remove('rm-intro-enter'); }, 2100);
     try { document.dispatchEvent(new CustomEvent('rm-intro-enter')); } catch (e) {}
   }
   function finish() {
