@@ -588,9 +588,9 @@ html.js .strip.is-pinned{scroll-snap-type:none;scroll-behavior:auto;cursor:defau
 @media (max-width:749px){.sub .bloglist .wp-block-post{grid-template-columns:1fr;gap:16px}}
 /* ---- blog: category cards. The card artwork is the visual; the post title is typeset into the card's own frame (box ≈ x 18–82 %, y 71.5–83 % of the card). Colour = category: orange návody (default), red pozor, green novinky. ---- */
 .sub .bloglist .wp-block-post{display:grid;grid-template-columns:minmax(0,.5fr) minmax(0,1fr);gap:20px clamp(28px,4vw,64px);align-items:center;max-width:none}
-.sub .bloglist .bcard{position:relative;aspect-ratio:2/3;width:100%;max-width:400px;border-radius:18px;overflow:hidden;background:#141416 url(orange.webp) center/cover no-repeat;container-type:inline-size;box-shadow:0 34px 70px -34px rgba(15,15,18,.5)}
-.sub .bloglist .wp-block-post.category-pozor .bcard{background-image:url(red.webp)}
-.sub .bloglist .wp-block-post.category-novinky .bcard{background-image:url(green.webp)}
+.sub .bloglist .bcard{position:relative;aspect-ratio:2/3;width:100%;max-width:400px;border-radius:18px;overflow:hidden;background:#141416 url(https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@6a6fb5a/v5/cards/orange.webp) center/cover no-repeat;container-type:inline-size;box-shadow:0 34px 70px -34px rgba(15,15,18,.5)}
+.sub .bloglist .wp-block-post.category-pozor .bcard{background-image:url(https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@6a6fb5a/v5/cards/red.webp)}
+.sub .bloglist .wp-block-post.category-novinky .bcard{background-image:url(https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@6a6fb5a/v5/cards/green.webp)}
 .sub .bloglist .bcard .bcard__title{position:absolute;inset:0;margin:0;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:107.5cqw 18cqw 25cqw;text-align:center;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.02;font-size:4.9cqw;color:#F4F4F6;text-shadow:0 1px 2px rgba(0,0,0,.6)}
 .sub .bloglist .bcard .bcard__title a{color:inherit;text-decoration:none;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;transition:color .3s}
 .sub .bloglist .bcard .bcard__title a::after{content:"";position:absolute;inset:0}
