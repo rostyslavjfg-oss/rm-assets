@@ -173,6 +173,71 @@
   function trCF7(){ if(LANG==='sk') return; $$('.wpcf7-response-output, .wpcf7-not-valid-tip').forEach(function(el){ var k=(el.textContent||'').trim(); var m=CF7MSG[k]; if(m!==undefined) el.textContent=(m[LANG]||k); }); }
   ['wpcf7invalid','wpcf7spam','wpcf7mailsent','wpcf7mailfailed','wpcf7submit'].forEach(function(ev){ document.addEventListener(ev,function(){ setTimeout(trCF7,0); setTimeout(trCF7,400); }); });
 
+  /* ---- scroll engine: smoothed progress variables for the CSS motion (see site.css "scroll-driven motion").
+     --sy on <html>: hero scroll 0..1. Per element: --p 0..1 while it travels through the viewport, --pv -1..1 around the centre.
+     Values ease toward their targets each frame, so the motion has weight even on a mouse wheel. ---- */
+  (function(){
+    if(reduced) return;
+    var items=[], vh=innerHeight, dirty=true, raf=0, syT=0, sy=0, K=0.14;
+    var st=$('.state');
+    if(st){ var pnl=$('.panel',st); if(pnl){ var pin=document.createElement('div'); pin.className='state__pin'; pnl.parentNode.insertBefore(pin,pnl); pin.appendChild(pnl); }
+      var stWords=function(){ $$('h2, p',st).forEach(function(el){ if(!el.querySelector('.w')) splitWords(el); el.style.setProperty('--n',$$('.w',el).length); }); };
+      stWords();
+      $$('#lang button').forEach(function(b){ b.addEventListener('click',function(){ setTimeout(stWords,0); }); }); }
+    var cases=$('.cases'), strip=$('#strip'), cp=null;
+    if(cases){ if(strip){ var pinC=document.createElement('div'); pinC.className='cases__pin'; while(cases.firstChild) pinC.appendChild(cases.firstChild); cases.appendChild(pinC); } }
+    function stepPx(){ var sl=$('.slide',strip); if(!sl) return 400; return sl.getBoundingClientRect().width+parseFloat(getComputedStyle(strip).columnGap||'32'); }
+    function casesSetup(){
+      if(!cases) return; if(!strip) return;
+      var wide=matchMedia('(min-width:821px)').matches, visible=cases.offsetParent!==null, extra=0;
+      if(wide){ if(visible){ extra=strip.scrollWidth-strip.clientWidth; } }
+      if(extra<10){ if(cp){ cases.style.minHeight=''; cases.classList.remove('is-pin'); strip.classList.remove('is-pinned'); cp=null; } return; }
+      cp={extra:extra,x:strip.scrollLeft};
+      cases.classList.add('is-pin'); strip.classList.add('is-pinned'); cases.style.minHeight=(innerHeight+extra)+'px';
+    }
+    function casesFrame(){
+      if(!cp) return false;
+      var r=cases.getBoundingClientRect(), range=r.height-innerHeight; if(range<=0) return false;
+      var pr=Math.min(1,Math.max(0,-r.top/range)), tx=pr*cp.extra;
+      cp.x+=(tx-cp.x)*K;
+      if(Math.abs(tx-cp.x)<0.4) return false;
+      strip.scrollLeft=cp.x; return true;
+    }
+    if(strip){
+      ['#next','#prev'].forEach(function(id,k){ var b=$(id); if(!b) return; b.addEventListener('click',function(e){ if(!cp) return; e.stopImmediatePropagation(); window.scrollBy({top:(k?-1:1)*stepPx(),behavior:'smooth'}); },true); });
+      strip.addEventListener('pointerdown',function(e){ if(cp) e.stopImmediatePropagation(); },true);
+    }
+    function reg(el){ items.push({el:el,p:0,pv:0,tp:0,tpv:0}); }
+    $$('.svc2 li, .sec__head, .about .card, .about__text, .nums2, .voices, .state, .contact__grid').forEach(reg);
+    function measure(){
+      vh=innerHeight; syT=Math.min(1,Math.max(0,scrollY/vh));
+      items.forEach(function(o){ var r=o.el.getBoundingClientRect(); if(!r.height) return;
+        o.tp=Math.min(1,Math.max(0,(vh-r.top)/(vh+r.height)));
+        o.tpv=Math.max(-1,Math.min(1,(vh/2-(r.top+r.height/2))/(vh/2+r.height/2))); });
+    }
+    function frame(){
+      raf=0; var moving=false;
+      sy+=(syT-sy)*K; if(Math.abs(syT-sy)>0.0005) moving=true; html.style.setProperty('--sy',sy.toFixed(4));
+      items.forEach(function(o){ o.p+=(o.tp-o.p)*K; o.pv+=(o.tpv-o.pv)*K;
+        if(Math.abs(o.tp-o.p)>0.0005) moving=true; if(Math.abs(o.tpv-o.pv)>0.0005) moving=true;
+        o.el.style.setProperty('--p',o.p.toFixed(4)); o.el.style.setProperty('--pv',o.pv.toFixed(4)); });
+      if(casesFrame()) moving=true;
+      if(dirty) moving=true;
+      dirty=false;
+      if(moving){ measure(); raf=requestAnimationFrame(frame); }
+    }
+    function kick(){ dirty=true; if(!raf) raf=requestAnimationFrame(frame); }
+    window.addEventListener('scroll',kick,{passive:true});
+    window.addEventListener('resize',function(){ casesSetup(); kick(); },{passive:true});
+    window.addEventListener('load',function(){ casesSetup(); kick(); });
+    document.addEventListener('rm-intro-enter',kick);
+    $$('#lang button').forEach(function(b){ b.addEventListener('click',function(){ setTimeout(function(){ casesSetup(); kick(); },50); }); });
+    casesSetup(); measure();
+    /* first paint: snap to the measured values instead of easing in from zero */
+    sy=syT; items.forEach(function(o){ o.p=o.tp; o.pv=o.tpv; });
+    kick();
+  })();
+
   /* ---- lead source: remember where the visitor came from (first touch of the visit + first ever visit)
      and append it to the contact form message right before Contact Form 7 sends it (the visitor's textarea stays clean) ---- */
   (function(){

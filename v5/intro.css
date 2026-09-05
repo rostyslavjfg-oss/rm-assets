@@ -1,19 +1,21 @@
 /* rostyslav-marketing.com intro overlay */
 html.rm-intro-lock,html.rm-intro-lock body{overflow:hidden !important}
 html.rm-intro-skip #rm-intro{display:none !important}
-#rm-intro{position:fixed;left:0;right:0;top:-64px;bottom:0;z-index:2147483000;background:#050506;color:#f4f0e9;opacity:1;transition:opacity .6s cubic-bezier(.22,1,.36,1);-webkit-tap-highlight-color:transparent}
-#rm-intro.is-done{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .6s cubic-bezier(.22,1,.36,1),visibility 0s linear .6s}
+#rm-intro{position:fixed;left:0;right:0;top:-64px;bottom:0;z-index:2147483000;background:#050506;color:#f4f0e9;opacity:1;-webkit-tap-highlight-color:transparent}
+#rm-intro.is-flying{transition:opacity .2s linear}
+#rm-intro.is-done{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s linear,visibility 0s linear .3s}
 #rm-intro .rm-intro__stage{position:absolute;top:64px;left:0;right:0;bottom:0;overflow:hidden;cursor:pointer;outline:none;background:#050506}
 #rm-intro .rm-intro__scene{position:absolute;inset:0;z-index:1;opacity:0;transition:opacity 1.1s cubic-bezier(.22,1,.36,1);will-change:transform}
 #rm-intro.is-ready .rm-intro__scene{opacity:1}
 #rm-intro.is-flicker .rm-intro__scene{filter:brightness(.72)}
 #rm-intro .rm-intro__figure{position:absolute;left:50%;top:50%;height:min(82vh,116vw);height:min(82svh,116vw);aspect-ratio:1446/2000;transform:translate(-50%,-50%)}
 #rm-intro .rm-intro__zoom{position:absolute;inset:0;transform-origin:50% 78.5%;will-change:transform,opacity,filter}
-#rm-intro .rm-intro__body{position:absolute;inset:0;transform-origin:50% 62%;animation:rm-breath 6.4s ease-in-out infinite}
+#rm-intro .rm-intro__body{position:absolute;inset:0;transform-origin:50% 62%;animation:rm-breath 6.4s ease-in-out infinite,rm-shimmer 3.1s ease-in-out infinite}
 #rm-intro .rm-intro__pic{position:absolute;inset:0;margin:0;display:block;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none;pointer-events:none}
 #rm-intro .rm-intro__pic--open{opacity:0}
 #rm-intro.is-open .rm-intro__pic--open{opacity:1}
 #rm-intro.is-open .rm-intro__pic--closed{opacity:0}
+#rm-intro .rm-intro__speck{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:overlay;opacity:.24;image-rendering:pixelated;image-rendering:crisp-edges}
 #rm-intro .rm-intro__shards{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 #rm-intro .rm-intro__fog{position:absolute;inset:-22%;z-index:2;pointer-events:none;mix-blend-mode:screen;will-change:transform}
 #rm-intro .rm-intro__fog--a{background:radial-gradient(ellipse 34% 28% at 28% 64%,rgba(150,158,172,.085),transparent 70%),radial-gradient(ellipse 28% 36% at 76% 28%,rgba(140,146,160,.07),transparent 70%);animation:rm-fog-a 38s ease-in-out infinite alternate}
@@ -36,7 +38,8 @@ html.rm-intro-skip #rm-intro{display:none !important}
 #rm-intro.is-sound .rm-intro__snd b:nth-child(3){animation-delay:-.6s}
 #rm-intro.is-sound .rm-intro__snd b:nth-child(4){animation-delay:-.2s}
 #rm-intro.is-flying .rm-intro__snd{opacity:0;transition:opacity .25s ease;pointer-events:none}
-html.rm-intro-enter #rosw-app{animation:rm-page-in 1.1s cubic-bezier(.22,1,.36,1) both}
+html.rm-intro-lock #rosw-app{transform:scale(1.06);transform-origin:50% 42%}
+html.rm-intro-enter #rosw-app{animation:rm-page-in 1.9s cubic-bezier(.22,1,.36,1) both}
 @keyframes rm-breath{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(0,-5px,0) scale(1.012)}}
 @keyframes rm-hint{0%,100%{opacity:.5;letter-spacing:.14em}50%{opacity:.95;letter-spacing:.22em}}
 @keyframes rm-roll{0%{transform:translateY(0)}100%{transform:translateY(860%)}}
@@ -44,7 +47,8 @@ html.rm-intro-enter #rosw-app{animation:rm-page-in 1.1s cubic-bezier(.22,1,.36,1
 @keyframes rm-fog-a{from{transform:translate3d(-3%,-2%,0) scale(1)}to{transform:translate3d(3%,2.5%,0) scale(1.12)}}
 @keyframes rm-fog-b{from{transform:translate3d(2.5%,2%,0) scale(1.08)}to{transform:translate3d(-3%,-2.5%,0) scale(1)}}
 @keyframes rm-grain{0%{transform:translate3d(-4%,-3%,0) scale(1.16)}25%{transform:translate3d(3%,2%,0) scale(1.18)}50%{transform:translate3d(-2%,4%,0) scale(1.15)}75%{transform:translate3d(4%,-2%,0) scale(1.18)}100%{transform:translate3d(-4%,-3%,0) scale(1.16)}}
-@keyframes rm-page-in{from{opacity:0;transform:translate3d(0,18px,0) scale(1.012)}to{opacity:1;transform:none}}
+@keyframes rm-page-in{from{transform:scale(1.06)}to{transform:none}}
+@keyframes rm-shimmer{0%,100%{filter:brightness(1)}17%{filter:brightness(1.03)}31%{filter:brightness(.985)}52%{filter:brightness(1.015)}74%{filter:brightness(.99)}}
 @keyframes rm-eq{from{height:2px}to{height:10px}}
 @keyframes rm-gl-text{0%{transform:translate(-50%,0)}33%{transform:translate(calc(-50% - 2px),0)}66%{transform:translate(calc(-50% + 1px),1px)}100%{transform:translate(-50%,0)}}
-@media (prefers-reduced-motion:reduce){#rm-intro .rm-intro__body,#rm-intro .rm-intro__hint,#rm-intro .rm-intro__grain,#rm-intro .rm-intro__scan::after,#rm-intro .rm-intro__fog,#rm-intro .rm-intro__vignette,#rm-intro .rm-intro__snd b{animation:none}#rm-intro .rm-intro__grain,#rm-intro .rm-intro__dust,#rm-intro .rm-intro__shards,#rm-intro .rm-intro__scan{display:none}}
+@media (prefers-reduced-motion:reduce){#rm-intro .rm-intro__body,#rm-intro .rm-intro__hint,#rm-intro .rm-intro__grain,#rm-intro .rm-intro__scan::after,#rm-intro .rm-intro__fog,#rm-intro .rm-intro__vignette,#rm-intro .rm-intro__snd b{animation:none}#rm-intro .rm-intro__grain,#rm-intro .rm-intro__dust,#rm-intro .rm-intro__shards,#rm-intro .rm-intro__speck,#rm-intro .rm-intro__scan{display:none}html.rm-intro-lock #rosw-app{transform:none}}

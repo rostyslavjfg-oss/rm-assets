@@ -14,6 +14,7 @@
   var open = root.querySelector('[data-rm-img="open"]');
   var dust = root.querySelector('[data-rm-dust]');
   var shards = root.querySelector('[data-rm-shards]');
+  var speck = root.querySelector('[data-rm-speck]');
   if (!stage || !scene || !figure || !zoom || !closed || !open) return;
   var reduced = false;
   try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
@@ -155,6 +156,8 @@
     closed: mobile ? closed.getAttribute('data-rm-m') : closed.getAttribute('data-rm-d'),
     open: mobile ? open.getAttribute('data-rm-m') : open.getAttribute('data-rm-d')
   };
+  closed.crossOrigin = 'anonymous';
+  open.crossOrigin = 'anonymous';
   closed.setAttribute('src', URLS.closed);
   open.setAttribute('src', URLS.open);
   var isOpen = false;
@@ -163,9 +166,67 @@
     root.classList.toggle('is-open', isOpen);
   }
 
+
+  /* ---- speck: fine grain that crawls over the mask surface and shimmers a little.
+     Six pre-rendered noise frames, each cut to the mask's own luminance, cycled at ~12 fps. ---- */
+  var spctx = null, spFrames = [], spMaskC = null, spMaskO = null, spIdx = 0, spNext = 0, spW = 0, spH = 0, spReady = false;
+  if (speck) { if (!reduced) spctx = speck.getContext('2d'); }
+  function lumMask(img) {
+    var w = 360, h = Math.round(w * img.naturalHeight / img.naturalWidth) || 498;
+    var c = document.createElement('canvas'); c.width = w; c.height = h;
+    var x = c.getContext('2d'); x.drawImage(img, 0, 0, w, h);
+    var d = x.getImageData(0, 0, w, h), q = d.data, i, l;
+    for (i = 0; i < q.length; i += 4) {
+      l = q[i] * 0.299 + q[i + 1] * 0.587 + q[i + 2] * 0.114;
+      q[i] = 255; q[i + 1] = 255; q[i + 2] = 255;
+      q[i + 3] = l < 28 ? 0 : Math.min(255, Math.round(l * 1.25));
+    }
+    x.putImageData(d, 0, 0);
+    return c;
+  }
+  function noiseFrame(w, h) {
+    var c = document.createElement('canvas'); c.width = w; c.height = h;
+    var x = c.getContext('2d'); var d = x.createImageData(w, h), q = d.data, i, r;
+    for (i = 0; i < q.length; i += 4) {
+      r = Math.random();
+      if (r < 0.16) { q[i] = 255; q[i + 1] = 250; q[i + 2] = 240; q[i + 3] = 90 + Math.random() * 165; }
+      else if (r < 0.27) { q[i] = 0; q[i + 1] = 0; q[i + 2] = 0; q[i + 3] = 110 + Math.random() * 145; }
+    }
+    x.putImageData(d, 0, 0);
+    return c;
+  }
+  function speckBuild() {
+    if (!spctx) return;
+    if (spReady) return;
+    if (!closed.naturalWidth) return;
+    try {
+      spMaskC = lumMask(closed);
+      spMaskO = open.naturalWidth ? lumMask(open) : spMaskC;
+    } catch (e) { spctx = null; return; }
+    var w = spMaskC.width, h = spMaskC.height, k;
+    for (k = 0; k < 6; k += 1) spFrames.push(noiseFrame(w, h));
+    spW = w; spH = h; speck.width = w; speck.height = h;
+    spReady = true;
+  }
+  open.addEventListener('load', function () { if (spReady) { try { spMaskO = lumMask(open); } catch (e) {} } });
+  function drawSpeck(now) {
+    if (!spReady) return;
+    if (now < spNext) return;
+    spNext = now + 70 + Math.random() * 60;
+    spIdx = (spIdx + 1 + Math.floor(Math.random() * 2)) % spFrames.length;
+    spctx.globalCompositeOperation = 'source-over';
+    spctx.clearRect(0, 0, spW, spH);
+    spctx.drawImage(spFrames[spIdx], 0, 0);
+    spctx.globalCompositeOperation = 'destination-in';
+    spctx.drawImage(isOpen ? spMaskO : spMaskC, 0, 0);
+    /* shimmer: a slow wave plus a rare one-frame dip */
+    var o = 0.24 + 0.05 * Math.sin(now / 900) + (Math.random() < 0.06 ? -0.09 : 0);
+    speck.style.opacity = Math.max(0.08, o).toFixed(3);
+  }
+
   /* mask fades in from the dark once the first frame is decoded */
   var readyDone = false;
-  function ready() { if (readyDone) return; readyDone = true; root.classList.add('is-ready'); sizeShards(); sndStart(); }
+  function ready() { if (readyDone) return; readyDone = true; root.classList.add('is-ready'); sizeShards(); speckBuild(); sndStart(); }
   if (closed.complete) { if (closed.naturalWidth > 0) ready(); }
   closed.addEventListener('load', ready);
   closed.addEventListener('error', ready);
@@ -282,6 +343,7 @@
     if (!hidden) {
       if (now - lastDust > 33) { lastDust = now; drawDust(now); }
       drawShards(now);
+      drawSpeck(now);
     }
     requestAnimationFrame(tick);
   }
@@ -366,6 +428,22 @@
     var c = (n - 0.82) / 0.18;
     return 0.9 + 0.1 * (1 - Math.pow(1 - c, 1.35));
   }
+  /* the open mouth is a window: a feathered elliptical hole in the overlay, sized to the jaw gap
+     (about 37% of the figure's width, 4% of its height, centred at the zoom origin) and scaled with the zoom;
+     in the last stretch it grows past the viewport so the page is simply there when the overlay goes. */
+  function holeAt(t, s) {
+    var fr = figure.getBoundingClientRect(), rr = root.getBoundingClientRect();
+    var ox = fr.left + fr.width * 0.5 - rr.left, oy = fr.top + fr.height * 0.785 - rr.top;
+    var openK = clamp(t / 0.14);
+    var g = clamp((t - 0.5) / 0.38); g = g * g * (3 - 2 * g);
+    var rx = fr.width * 0.185 * s * openK + g * window.innerWidth * 1.4;
+    var ry = fr.height * 0.021 * s * openK + g * window.innerHeight * 1.4;
+    if (rx < 1) rx = 1;
+    if (ry < 1) ry = 1;
+    var grad = 'radial-gradient(' + rx.toFixed(1) + 'px ' + ry.toFixed(1) + 'px at ' + ox.toFixed(1) + 'px ' + oy.toFixed(1) + 'px, transparent 0, transparent 60%, #000 100%)';
+    root.style.webkitMaskImage = grad;
+    root.style.maskImage = grad;
+  }
   function signalEnter() {
     if (entered) return;
     entered = true;
@@ -399,18 +477,19 @@
     burst(true, 420);
     tx = 0; ty = 0; trx = 0; tryy = 0;
     var started = performance.now();
-    var DUR = 2400;
+    var DUR = 2600;
     var midBurst = false;
     function run(now) {
       var t = clamp((now - started) / DUR);
       var e = ease(t);
-      fly.s = 1 + e * 11;
-      var dark = clamp((t - 0.42) / 0.46);
-      var fade = clamp((t - 0.8) / 0.18);
-      zoom.style.filter = 'brightness(' + (1 - dark * 0.94).toFixed(3) + ')';
-      zoom.style.opacity = (1 - fade).toFixed(3);
+      fly.s = 1 + e * 13;
+      var dark = clamp((t - 0.36) / 0.5);
+      var fade = clamp((t - 0.84) / 0.16);
+      zoom.style.filter = 'brightness(' + (1 - dark * 0.72).toFixed(3) + ')';
+      root.style.opacity = (1 - fade).toFixed(3);
+      holeAt(t, fly.s);
       if (t >= 0.46) { if (!midBurst) { midBurst = true; burst(true, 360); } }
-      if (t >= 0.62) signalEnter();
+      if (t >= 0.3) signalEnter();
       apply();
       if (t < 1) requestAnimationFrame(run); else finish();
     }
