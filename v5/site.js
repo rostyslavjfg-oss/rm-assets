@@ -149,7 +149,7 @@
   var lastY=0; window.addEventListener('scroll',function(){ var y=scrollY; var down=false; if(y>lastY){ if(y>160){ if(!html.classList.contains('menu-open')) down=true; } } html.classList.toggle('hide-top',down); lastY=y; },{passive:true});
 
   var hf=$('#hflip');
-  if(hf){ var hflip=function(){ var on=!hf.classList.contains('is-flipped'); hf.classList.toggle('is-flipped',on); hf.setAttribute('aria-pressed',on?'true':'false'); };
+  if(hf){ var hflip=function(){ var on=!hf.classList.contains('is-flipped'); hf.classList.toggle('is-flipped',on); hf.setAttribute('aria-pressed',on?'true':'false'); $$('img[data-flip-src]',hf).forEach(function(im){ im.setAttribute('src',im.getAttribute('data-flip-src')); im.removeAttribute('data-flip-src'); }); };
     hf.addEventListener('click',hflip); hf.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); hflip(); } }); }
 
   var card=$('#card');
