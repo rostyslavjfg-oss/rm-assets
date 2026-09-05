@@ -67,6 +67,7 @@ html.js .svc2.stag>li .g{transform:rotate(-40deg) scale(.5);opacity:0;transition
 html.js .svc2.stag.is-in>li .g{transform:none;opacity:1}
 html.js .nums2.stag>div{transform:translateY(30px) scale(.86);transform-origin:left bottom}
 html.js .strip.stag>.slide{transform:translateY(46px) rotate(1.5deg)}
+html.js .strip.stag.is-in>.slide{transform:none}
 /* photo wipe */
 html.js .wipe .card__face{clip-path:inset(100% 0 0 0 round 24px);transition:clip-path 1.2s var(--ease)}
 html.js .wipe.is-in .card__face{clip-path:inset(0 0 0 0 round 24px)}
