@@ -529,6 +529,7 @@ main.sub{position:relative;max-width:1400px;margin:0 auto;padding:clamp(150px,20
 /* cookie consent bar (built by site.js) */
 .consent{position:fixed;left:18px;bottom:18px;z-index:900;max-width:380px;padding:18px 20px 16px;border-radius:22px;background:rgba(255,255,255,.86);opacity:0;transform:translateY(16px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
 .consent.is-in{opacity:1;transform:none}
+html.menu-open .consent{opacity:0;pointer-events:none;transform:translateY(16px)}
 .consent__txt{margin:0 0 14px;font-size:14px;line-height:1.5;color:var(--ink)}
 .consent__btns{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .consent__btns button{font:inherit;font-size:13px;font-weight:600;padding:10px 16px;border-radius:999px;border:1px solid var(--ink);cursor:pointer;line-height:1}
