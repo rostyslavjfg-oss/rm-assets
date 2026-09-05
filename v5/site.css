@@ -98,9 +98,9 @@ html.hide-top .top{transform:translateY(-140%)}
 .top .right{display:flex;align-items:center;gap:18px}
 .lang{display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:12px;letter-spacing:.06em}
 .lang span{color:var(--mute)}
-.lang button{color:var(--mute);font:inherit;padding:4px 2px;transition:color .3s}
-.lang button.is-on{color:var(--ink);font-weight:700}
-.lang button:hover{color:var(--accent)}
+.lang button,.lang a{color:var(--mute);font:inherit;padding:4px 2px;transition:color .3s;text-decoration:none;background:none;border:0;cursor:pointer}
+.lang button.is-on,.lang a.is-on{color:var(--ink);font-weight:700}
+.lang button:hover,.lang a:hover{color:var(--accent)}
 
 .pill{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border-radius:999px;padding:10px 16px;font-size:13px;font-weight:500;transition:background .3s,transform .4s var(--ease)}
 .pill:hover{background:var(--accent);transform:translateY(-1px)}
@@ -162,7 +162,7 @@ html.menu-open{overflow:hidden}
 .state__bg{position:absolute;inset:0;z-index:-1;background:url(https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@4fc4b70/v5/bg-grain.jpg) center/cover no-repeat;opacity:.5}
 .state__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,var(--bg),rgba(255,255,255,.2) 30%,rgba(255,255,255,.2) 70%,var(--bg))}
 .state .panel{max-width:1100px;margin:0 auto;padding:clamp(28px,4vw,56px);display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.9fr);gap:clamp(24px,4vw,64px);align-items:end}
-.state h2{margin:0;font-size:clamp(34px,4.2vw,64px);line-height:.92}
+.state h2{margin:0;font-size:clamp(34px,4.2vw,64px);line-height:.92;overflow-wrap:break-word}
 .state p{margin:0;color:var(--ink-2);font-size:clamp(16px,1.2vw,19px);line-height:1.5;text-wrap:pretty}
 .state .avail{display:inline-flex;align-items:center;gap:10px;margin-top:18px;color:var(--ink)}
 .state .avail::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(255,77,28,.18)}
@@ -341,7 +341,7 @@ html.menu-open{overflow:hidden}
   .brand__mark{height:15px!important}
   .foot__mark{height:14px!important}
   .top .right .lang{display:flex;gap:6px}
-  .lang button{padding:4px 1px;font-size:11px}
+  .lang button,.lang a{padding:4px 1px;font-size:11px}
   .menu-btn span{display:none}
   .menu-btn{padding:8px}
   .pill{padding:9px 13px;font-size:12px}
@@ -432,7 +432,7 @@ html.menu-open{overflow:hidden}
 .top .right{gap:8px}
 .top .right .lang{gap:2px}
 .top .lang span{display:none}
-.top .lang button{padding:4px 3px;font-size:10px}
+.top .lang button,.top .lang a{padding:4px 3px;font-size:10px}
 .top .pill{padding:8px 11px;font-size:11px;gap:6px;flex:0 0 auto}
 .top .menu-btn{padding:6px}
 .brand__mark{height:13px!important}
@@ -497,7 +497,7 @@ main.sub{position:relative;max-width:1400px;margin:0 auto;padding:clamp(150px,20
 .sub .nf p{font-size:clamp(18px,1.4vw,22px);color:var(--ink-2);margin:0}
 .sub .nf .pill{justify-self:start}
 @media (max-width:749px){main.sub{padding-top:120px}.sub .cta{padding:26px 24px;border-radius:22px}.sub .wp-block-post-content th,.sub .wp-block-post-content td{padding:10px;font-size:.9em}}
-.foot__cols .legal-links{display:flex;gap:18px;white-space:nowrap}
+.foot__cols .legal-links{display:flex;flex-wrap:wrap;gap:6px 18px}
 .foot__cols .legal-links a{color:inherit;text-decoration:none}
 .foot__cols .legal-links a:hover{color:var(--ink)}
 .sub .post__head .lead p{margin:0}
@@ -527,17 +527,39 @@ main.sub{position:relative;max-width:1400px;margin:0 auto;padding:clamp(150px,20
 @media (max-width:820px){.sub .legal table td,.sub .legal table th{font-size:13px;padding:10px 12px}}
 
 /* cookie consent bar (built by site.js) */
-.consent{position:fixed;left:18px;bottom:18px;z-index:900;max-width:380px;padding:18px 20px 16px;border-radius:22px;background:rgba(255,255,255,.86);opacity:0;transform:translateY(16px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
-.consent.is-in{opacity:1;transform:none}
-html.menu-open .consent{opacity:0;pointer-events:none;transform:translateY(16px)}
-.consent__txt{margin:0 0 14px;font-size:14px;line-height:1.5;color:var(--ink)}
-.consent__btns{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.consent__btns button{font:inherit;font-size:13px;font-weight:600;padding:10px 16px;border-radius:999px;border:1px solid var(--ink);cursor:pointer;line-height:1}
-.consent__ok{background:var(--ink);color:#fff}
-.consent__no{background:transparent;color:var(--ink)}
-.consent__ok:hover,.consent__no:hover{background:var(--accent);border-color:var(--accent);color:#fff}
-.consent__more{margin-left:auto;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);text-decoration:none}
-.consent__more:hover{color:var(--ink)}
+/* ---- consent dialog: the mask offers a cookie. Artwork plate (frame + figure) with live text laid over the frame interior; on phones the figure crop sits above a plain card ---- */
+.consent{position:fixed;left:50%;bottom:0;transform:translate(-50%,28px);z-index:900;width:min(760px,96vw);container-type:inline-size;opacity:0;pointer-events:none;transition:opacity .6s var(--ease),transform .8s var(--ease);filter:drop-shadow(0 26px 50px rgba(0,0,0,.42))}
+.consent.is-in{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+html.menu-open .consent{opacity:0;pointer-events:none}
+.consent__art{position:relative;width:100%;aspect-ratio:3/2}
+.consent__plate{display:block;width:100%;height:100%;object-fit:contain}
+.consent__fig{display:none}
+.consent__box{position:absolute;left:11%;right:9.5%;top:56%;bottom:13%;display:grid;grid-template-columns:1.3fr 1fr;gap:4cqw;align-items:center;color:#efe9e1}
+.consent__kicker{display:flex;align-items:center;gap:1.4cqw;font-family:'Cinzel',Georgia,serif;font-size:1.35cqw;letter-spacing:.42em;text-transform:uppercase;color:#d9d2c7}
+.consent__kicker i{flex:0 0 14cqw;height:1px;background:linear-gradient(90deg,#d9d2c7,rgba(217,210,199,0))}
+.consent__title{margin:.7cqw 0 1.1cqw;font-family:'Cinzel',Georgia,serif;font-weight:600;font-size:5cqw;line-height:1;letter-spacing:.02em;color:#f4efe8;text-transform:uppercase;text-wrap:balance}
+.consent .consent__txt{margin:0 0 1.6cqw;font-family:'Jost',var(--body);font-weight:300;font-size:1.55cqw;line-height:1.5;color:#e7dfd6;max-width:36cqw}
+.consent__more{font-family:'Cinzel',Georgia,serif;font-size:1.05cqw;letter-spacing:.32em;text-transform:uppercase;color:#d9d2c7;text-decoration:underline;text-underline-offset:.55em;text-decoration-color:rgba(217,210,199,.55)}
+.consent__more:hover{color:#fff}
+.consent__btns{display:grid;gap:1.4cqw}
+.consent__btns button{font-family:'Cinzel',Georgia,serif;font-weight:600;font-size:1.6cqw;letter-spacing:.14em;text-transform:uppercase;padding:2.1cqw 1.4cqw;line-height:1;cursor:pointer;border:0;position:relative;clip-path:polygon(3.5% 0,96.5% 0,100% 24%,100% 76%,96.5% 100%,3.5% 100%,0 76%,0 24%);transition:transform .35s var(--ease),filter .35s}
+.consent__ok{background:linear-gradient(180deg,#f3eee7,#d6cfc5);color:#1a0c0f;box-shadow:inset 0 0 0 2px #7b7369}
+.consent__no{background:#1c0b0f;color:#efe9e1;box-shadow:inset 0 0 0 2px #a01c2c}
+.consent__ok:hover,.consent__no:hover{transform:translateY(-2px);filter:brightness(1.08)}
+@media (max-width:719px){
+  .consent{width:auto;left:10px;right:10px;bottom:10px;transform:translateY(24px);filter:drop-shadow(0 18px 36px rgba(0,0,0,.4))}
+  .consent.is-in{transform:none}
+  .consent__art{aspect-ratio:auto;height:50vw;max-height:260px;overflow:hidden;background:radial-gradient(70% 90% at 50% 100%,#4a0d18,#150708 72%);border:1px solid #9d968c;border-bottom:0;border-radius:18px 18px 0 0}
+  .consent__plate{display:none}
+  .consent__fig{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 12%}
+  .consent__box{position:static;display:block;padding:16px 18px 18px;background:linear-gradient(180deg,#2a0c12,#140608);border:1px solid #9d968c;border-top:0;border-radius:0 0 18px 18px}
+  .consent__kicker{font-size:10px;gap:10px}.consent__kicker i{flex:0 0 60px}
+  .consent__title{font-size:24px;margin:8px 0 8px}
+  .consent .consent__txt{font-size:14px;max-width:none;margin-bottom:12px}
+  .consent__more{font-size:10px}
+  .consent__btns{grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .consent__btns button{font-size:12px;padding:14px 8px}
+}
 @media (max-width:820px){.consent{left:10px;right:10px;bottom:10px;max-width:none;padding:16px 16px 14px;border-radius:18px}.consent__more{margin-left:0;width:100%;margin-top:4px}}
 
 /* ---- scroll-driven motion. site.js writes smoothed vars: --sy (hero scroll 0..1 on <html>), --p (0..1 through the viewport) and --pv (-1..1 around the centre) per element. Individual translate/rotate/scale properties compose with the reveal transforms instead of fighting them. ---- */
@@ -558,7 +580,7 @@ html.js .voices{translate:0 calc(var(--pv,0) * -24px)}
 html.js .contact__grid{translate:0 calc(var(--pv,0) * -20px)}
 /* statement: pinned panel, the copy lights up word by word as you scroll through */
 html.js .state{padding-top:0;padding-bottom:0;min-height:190vh}
-html.js .state__pin{position:sticky;top:0;min-height:100vh;display:grid;align-items:center;padding:12vh 0;box-sizing:border-box}
+html.js .state__pin{position:sticky;top:0;min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr);align-items:center;padding:12vh 0;box-sizing:border-box}
 html.js .state .panel{scale:calc(.94 + .06 * min(1, calc(var(--p,0) * 2.2)))}
 html.js .state .w>span{opacity:clamp(.14, calc((var(--p,0) - .35) / .29 * (var(--n,10) + 1) - var(--i,0)), 1)}
 /* cases: on wide screens the section pins and the vertical scroll drives the strip sideways */

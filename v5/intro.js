@@ -47,6 +47,8 @@
   var HINT = { sk: 'vstúpiť', en: 'enter', uk: 'увійти' };
   var lang = 'sk';
   try { lang = localStorage.getItem('rosw_lang') || 'sk'; } catch (e) {}
+  var hl = (document.documentElement.getAttribute('lang') || '').slice(0, 2);
+  if (hl === 'en' || hl === 'uk') lang = hl;
   if (!HINT[lang]) lang = 'sk';
   if (hint) hint.textContent = HINT[lang];
 
