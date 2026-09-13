@@ -95,7 +95,11 @@
      Slovak (blog, legal) keep the in-page JS translation of the interface. A stored preference redirects the Slovak home once. ---- */
   var savedLang='sk'; try{ savedLang=localStorage.getItem('rosw_lang')||'sk'; }catch(e){}
   function altLink(l){ return document.querySelector('link[rel="alternate"][hreflang^="'+l+'"]'); }
-  var pageLang=(html.getAttribute('lang')||'sk').slice(0,2); if(['sk','cz','en','de','uk','ru','es','fr'].indexOf(pageLang)===-1) pageLang='sk';
+  var LOCALE2LANG={cs:'cz'};
+  var pageLang=(html.getAttribute('lang')||'sk').slice(0,2); pageLang=LOCALE2LANG[pageLang]||pageLang;
+  /* WordPress serves Czech as lang="cs-CZ" while our language slug is "cz"; without the map the page
+     reads as Slovak and a stored preference redirects it to another language. */
+  if(['sk','cz','en','de','uk','ru','es','fr'].indexOf(pageLang)===-1) pageLang='sk';
   var TRANSLATED=(pageLang!=='sk')||['sk','cz','en','de','uk','ru','es','fr'].some(function(l){ return l!=='sk'&&!!altLink(l); });
   var startLang=savedLang;
   if(TRANSLATED){ startLang=pageLang; if(pageLang==='sk'){ if(savedLang!=='sk'){ var go=altLink(savedLang); if(go){ if(go.href!==location.href) location.replace(go.href); } } } }
