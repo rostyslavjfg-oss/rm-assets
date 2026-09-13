@@ -21,7 +21,7 @@
 @font-face{font-family:'Silkscreen';font-style:normal;font-weight:700;font-display:swap;src:url(https://cdn.jsdelivr.net/gh/rostyslavjfg-oss/rm-assets@769fea5/v5/fonts/silkscreen-sk-bold.woff2) format('woff2');unicode-range:U+010C-010D,U+0164-0165,U+010E-010F,U+013D-013E,U+0147-0148,U+0154-0155,U+0139-013A}
 .entry-content,.wp-block-post-content,#rosw-app{max-width:none!important;margin:0!important;padding:0!important}
 #rosw-app{position:relative}
-html:not([lang="en"]):not([lang="uk"]) #projekty,html:not([lang="en"]):not([lang="uk"]) [data-cases-only]{display:none}
+html:not([lang="cz"]):not([lang="en"]):not([lang="de"]):not([lang="uk"]):not([lang="ru"]):not([lang="es"]):not([lang="fr"]) #projekty,html:not([lang="cz"]):not([lang="en"]):not([lang="de"]):not([lang="uk"]):not([lang="ru"]):not([lang="es"]):not([lang="fr"]) [data-cases-only]{display:none}
 :root{
   --bg:#FFFFFF; --field:#F3F3F4; --ink:#0F0F12; --ink-2:#4A4A50; --mute:#8A8A91; --stroke:rgba(15,15,18,.55);
   --accent:#C8202F;--accent-2:#8C1220;--accent-grad:linear-gradient(135deg,#E23A47 0%,#B71C2A 55%,#8C1220 100%);
@@ -53,8 +53,8 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .svgdefs{position:absolute;width:0;height:0;overflow:hidden}
 
 /* Cyrillic fallbacks: Big Shoulders and Silkscreen have no Cyrillic, so the UK version swaps to Oswald + Press Start 2P */
-html[lang="uk"] .display,html[lang="uk"] .hero h1,html[lang="uk"] .menu li a,html[lang="uk"] .svc2 h3,html[lang="uk"] .slide h3,html[lang="uk"] .award h3,html[lang="uk"] .foot__top .big,html[lang="uk"] .hflip__egg h3,html[lang="uk"] .num,html[lang="uk"] .slide .kpi,html[lang="uk"] .award .kpis b,html[lang="uk"] .award .medal{font-family:'Oswald','Arial Narrow',Impact,sans-serif;font-weight:700;letter-spacing:-.01em}
-html[lang="uk"] .mono{font-family:'Press Start 2P','Silkscreen',monospace;font-size:8.5px;letter-spacing:.04em;line-height:1.5}
+html[lang="uk"],html[lang="ru"] .display,html[lang="uk"],html[lang="ru"] .hero h1,html[lang="uk"],html[lang="ru"] .menu li a,html[lang="uk"],html[lang="ru"] .svc2 h3,html[lang="uk"],html[lang="ru"] .slide h3,html[lang="uk"],html[lang="ru"] .award h3,html[lang="uk"],html[lang="ru"] .foot__top .big,html[lang="uk"],html[lang="ru"] .hflip__egg h3,html[lang="uk"],html[lang="ru"] .num,html[lang="uk"],html[lang="ru"] .slide .kpi,html[lang="uk"],html[lang="ru"] .award .kpis b,html[lang="uk"],html[lang="ru"] .award .medal{font-family:'Oswald','Arial Narrow',Impact,sans-serif;font-weight:700;letter-spacing:-.01em}
+html[lang="uk"],html[lang="ru"] .mono{font-family:'Press Start 2P','Silkscreen',monospace;font-size:8.5px;letter-spacing:.04em;line-height:1.5}
 
 /* glass */
 .glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);border:1px solid var(--glass-edge);box-shadow:var(--glass-shadow);border-radius:20px;position:relative;overflow:hidden}
@@ -114,11 +114,6 @@ html.hide-top .top{transform:translateY(-140%)}
 .menu-btn i::after{transform:scaleX(.6);transform-origin:right}
 .menu-btn:hover i::after{transform:scaleX(1)}
 .top .right{display:flex;align-items:center;gap:18px}
-.lang{display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:12px;letter-spacing:.06em}
-.lang span{color:var(--mute)}
-.lang button,.lang a{color:var(--mute);font:inherit;padding:4px 2px;transition:color .3s;text-decoration:none;background:none;border:0;cursor:pointer}
-.lang button.is-on,.lang a.is-on{color:var(--ink);font-weight:700}
-.lang button:hover,.lang a:hover{color:var(--accent)}
 
 .pill{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border-radius:999px;padding:10px 16px;font-size:13px;font-weight:500;transition:background .3s,transform .4s var(--ease)}
 .pill:hover{background:var(--accent-grad);transform:translateY(-1px)}
@@ -363,8 +358,6 @@ html.menu-open{overflow:hidden}
   .top .bar{padding:8px 8px 8px 14px}
   .brand__mark{height:15px!important}
   .foot__mark{height:14px!important}
-  .top .right .lang{display:flex;gap:6px}
-  .lang button,.lang a{padding:6px 4px;font-size:11px;min-width:24px;min-height:24px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}
   .menu-btn span{display:none}
   .menu-btn{padding:8px}
   .pill{padding:9px 13px;font-size:12px}
@@ -453,9 +446,6 @@ html.menu-open{overflow:hidden}
 @media (max-width:480px){
 .top .bar{gap:8px;padding:8px 8px 8px 12px}
 .top .right{gap:8px}
-.top .right .lang{gap:2px}
-.top .lang span{display:none}
-.top .lang button,.top .lang a{padding:6px 5px;font-size:10px;min-width:26px;min-height:26px}
 .top .pill{padding:8px 11px;font-size:11px;gap:6px;flex:0 0 auto}
 .top .menu-btn{padding:6px}
 .brand__mark{height:13px!important}
@@ -579,7 +569,7 @@ html.menu-open .consent{opacity:0;pointer-events:none}
   .consent__kicker{position:absolute;left:12cqw;top:46cqw;font-size:2.3cqw;letter-spacing:.42em;gap:2cqw}
   .consent__kicker i{flex:0 0 18cqw}
   .consent__title{position:absolute;left:12cqw;right:10cqw;top:50.5cqw;margin:0;font-size:6cqw;line-height:1;text-align:left}
-  html[lang="uk"] .consent__title{font-size:5cqw}
+  html[lang="uk"],html[lang="ru"] .consent__title{font-size:5cqw}
   .consent .consent__txt{font-size:14px;max-width:none;margin:0 0 12px}
   .consent__more{font-size:10px}
   .consent__btns{grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
@@ -673,3 +663,39 @@ html.js .strip.is-pinned{scroll-snap-type:none;scroll-behavior:auto;cursor:defau
 /* blog card artwork: soft edges (the source art runs to the canvas edge) */
 .sub .bloglist .bcard,.sub .post .post__card{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%),linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%),linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%);mask-composite:intersect}
 .scrollcue span{color:var(--ink-2)}
+
+/* language: pixel-flag trigger in the bar, full-screen picker for the eight languages */
+.fl{display:block;image-rendering:pixelated;shape-rendering:crispEdges;flex:0 0 auto}
+.langbtn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--ink);padding:6px 9px;border-radius:999px;transition:background .25s,color .25s}
+.langbtn:hover{background:rgba(15,15,18,.06);color:var(--accent)}
+.langbtn .fl{width:18px;height:12px}
+.langbtn__code{font-weight:500}
+.langov{position:fixed;inset:0;z-index:95;background:#0F0F12;color:#fff;display:grid;align-content:center;padding:clamp(18px,4vw,56px);opacity:0;visibility:hidden;transition:opacity .38s var(--ease),visibility .38s}
+.langov.is-open{opacity:1;visibility:visible}
+.langov__top{position:absolute;top:clamp(16px,3vw,30px);left:clamp(18px,4vw,56px);right:clamp(18px,4vw,56px);display:flex;justify-content:space-between;align-items:center}
+.langov__kick{font-family:var(--px);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.langov__close{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:rgba(255,255,255,.6);transition:color .25s}
+.langov__close:hover{color:#fff}
+.langov__list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(24px,6vw,96px);width:100%;max-width:1100px;margin:0 auto}
+.langl{display:flex;align-items:center;gap:clamp(10px,1.6vw,20px);padding:clamp(6px,.9vw,10px) 0;color:rgba(255,255,255,.55);transition:color .28s var(--ease),transform .38s var(--ease)}
+.langl .fl{width:27px;height:18px;opacity:.5;transition:opacity .28s,transform .38s var(--ease)}
+.langl .nm{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(28px,4.2vw,50px);line-height:1.04;letter-spacing:-.01em;flex:1}
+.langl .nm.cy{font-family:'Oswald','Arial Narrow',system-ui,sans-serif;font-weight:700;font-size:clamp(24px,3.5vw,42px)}
+.langl .ab{font-family:var(--mono);font-size:11px;letter-spacing:.1em;opacity:.4}
+.langl:hover{color:#fff;transform:translateX(6px)}
+.langl:hover .fl{opacity:1;transform:scale(1.08)}
+.langl.is-on{color:var(--accent)}
+.langl.is-on .fl,.langl.is-on .ab{opacity:1}
+html.lang-open{overflow:hidden}
+@media (hover:none){.langl:hover{transform:none}}
+@media (max-width:700px){
+  .langov__list{grid-template-columns:1fr}
+  .langl{padding:7px 0;gap:12px}
+  .langl .nm{font-size:clamp(26px,7.6vw,34px)}
+  .langl .nm.cy{font-size:clamp(22px,6.6vw,29px)}
+  .langl .fl{width:24px;height:16px}
+}
+@media (max-width:480px){
+  .top .langbtn{padding:6px 7px;gap:6px;font-size:10px}
+  .top .langbtn .fl{width:16px;height:11px}
+}
